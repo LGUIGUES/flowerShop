@@ -1,0 +1,24 @@
+<!-- Affichage liste des produits de la categorie -->
+<article>
+    <div class="row-products">
+        <h2 class="title-gallery"><?= htmlspecialchars($infoCategory['title_category']) ?></h2>
+        <p class="text-category-gallery"><?= strip_tags($infoCategory['text_category'],$tags) ?></p>
+        <ul class="list-product">
+        <?php foreach($listProducts as $products) : ?>
+            <li class="container-card-product">
+                <a href="index.php?page=viewProduct&id=<?= htmlspecialchars($products['id_product']) ?>">
+                    <img class="card-product-img-<?= htmlspecialchars($products['orientation']) ?>" src="www/assets/img/product/category/<?= htmlspecialchars($products['orientation']).'/'.htmlspecialchars($products['name_category']) ?>" alt="<?= htmlspecialchars($products['description_image']) ?>" title="<?= htmlspecialchars($products['description_image']) ?>">
+                </a>
+                <ul>
+                    <li class="card-product-name"><h3><?= htmlspecialchars($products['name_product']) ?></h3></li>
+                    <li class="card-product-action">
+                        <a class="addBasket" href="index.php?page=createCart&idProduct=<?= htmlspecialchars($products['id_product']) ?>"><i class="fas fa-cart-plus"></i></a>                        
+                        <a href="index.php?page=viewProduct&id=<?= htmlspecialchars($products['id_product']) ?>" title="Voir le produit"><i class="fas fa-eye"></i></a>
+                    </li>                    
+                </ul>
+                <span class="card-product-price"><?= htmlspecialchars($products['price_tax_product']) ?> €</span> 
+            </li>
+        <?php endforeach; ?>    
+        </ul>
+    </div>       
+</article>

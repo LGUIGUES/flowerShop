@@ -1,0 +1,70 @@
+<?php if (!isset($_SESSION["idUser"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<!-- Affichage formulaire d'inscription cours floral -->
+<article>
+    <div class="row account-user">
+        <h2>Inscription cours floral</h2>
+        <p>Vous pouvez vous inscrire à un cours floral en remplissant ce formulaire.</p>
+        <nav class="breadcrumb">
+            <a class="first" href="index.php" title="Accueil">Accueil</a><span class="chevron">&gt;</span><a href="index.php?page=customer_account" title="Retour à votre espace personnel">Retour à votre espace personnel</a><span class="chevron">&gt;</span><a href="index.php?page=myBookingsFlowerWorkshop" title="Vos ateliers fleurs">Vos ateliers fleurs</a><span class="chevron">&gt;</span><span class="current-page">Inscription cours floral</span>
+        </nav>
+        <?php if (array_key_exists('errors', $_SESSION)) : ?>
+            <div class="errors">
+                <?= '<ul>' . implode('<li>', $_SESSION['errors']) . '</ul>'; ?>
+            </div>
+        <?php endif; ?>
+        <?php if (array_key_exists('success', $_SESSION)) : ?>
+            <div class="success"><?= '<ul>' . implode('<li>', $_SESSION['success']) . '</ul>'; ?>
+            </div>
+        <?php endif; ?>
+        <form action="index.php?page=registrationFlowerWorkshop" method="POST">
+            <fieldset>
+                <div class="grp-btn-radio">
+                    <label>Civilité</label>
+                    <label class="radio-inline">
+                        <span class="custom-radio">
+                            <input type="radio" name="gender" id="H" value="1" <?= isset($customer['id_gender']) && htmlspecialchars($customer['id_gender'] == 1) ? 'checked="checked"' : '' ?> disabled />
+                        </span>M
+                    </label>
+                    <label class="radio-inline">
+                        <span class="custom-radio">
+                            <input type="radio" name="gender" id="F" value="2" <?= isset($customer['id_gender']) && htmlspecialchars($customer['id_gender'] == 2) ? 'checked="checked"' : '' ?> disabled />
+                        </span>Mme
+                    </label>
+                </div>
+                <div class="grp-btn">
+                    <label for="lastName">Nom</label>
+                    <input type="text" name="lastName" id="lastName" value="<?= htmlspecialchars($customer['lastname']) ?>" disabled />
+                </div>
+                <div class="grp-btn">
+                    <label for="firstName">Prénom</label>
+                    <input type="text" name="firstName" id="firstName" value="<?= htmlspecialchars($customer['firstname']) ?>" disabled />
+                </div>
+                <div class="grp-btn">
+                    <label for="email">E-mail</label>
+                    <input type="email" name="email" id="email" value="<?= htmlspecialchars($customer['email']) ?>" disabled />
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="bookingDay">Ateliers disponibles</label>
+                    <select name="bookingDay" id="bookingDay" required>
+                        <option value="">Choisir un atelier</option>
+                        <?php foreach ($flowersWorkshop as $flowerWorkshop) : ?>
+                            <option value="<?= htmlspecialchars($flowerWorkshop['id_work']) ?>"><?= !empty($flowerWorkshop['space_available'] != 0) ? htmlspecialchars($flowerWorkshop['name_shop_day']) . ' ' . htmlspecialchars(date('d-m', strtotime($flowerWorkshop['work_date']))) . ' de ' . htmlspecialchars($flowerWorkshop['time_start']) . 'h à ' . htmlspecialchars($flowerWorkshop['time_end']) . 'h - Place encore disponible - Tarif : ' . number_format(htmlspecialchars($flowerWorkshop['price_tax']), 2, '.', '') . ' €' : htmlspecialchars($flowerWorkshop['name_shop_day']) . ' ' . htmlspecialchars(date('d-m', strtotime($flowerWorkshop['work_date']))) . ' de ' . htmlspecialchars($flowerWorkshop['time_start']) . 'h à ' . htmlspecialchars($flowerWorkshop['time_end']) . 'h - Plus de place disponible.' ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <p>Le règlement du cours se fera à la fin de celui-ci en magasin.</p>
+            </fieldset>
+            <div class="btn-form">
+                <button class="btn-form-submit" id="btn-form-submit" type="submit" name="submit">Enregistrer</button>
+                <a class="btn-form-cancel" href="index.php?page=customer_account" title="Annuler">Annuler</a>
+            </div>
+        </form>
+    </div>
+</article>
+<?php
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>

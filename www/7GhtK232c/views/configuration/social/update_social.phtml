@@ -1,0 +1,104 @@
+<?php if (!isset($_SESSION["idAdmin"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<article>
+    <h2>Connexions Réseaux Sociaux</h2>
+    <p>Connectez vos réseaux sociaux à votre boutique.</p>
+    <nav class="breadcrumb">
+        <a class="first" href="index.php?page=dashBoard">Retour Tableau de bord</a><span class="chevron">&gt;</span><a href="index.php?page=configuration">Retour page configuration</a><span class="chevron">&gt;</span><span class="current-page">Mise à jour réseaux sociaux</span>
+    </nav>
+    <?php if (array_key_exists('errors', $_SESSION)) : ?>
+        <div class="errors">
+            <?= '<ul>' . implode('<li>', $_SESSION['errors']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <?php if (array_key_exists('success', $_SESSION)) : ?>
+        <div class="success"><?= '<ul>' . implode('<li>', $_SESSION['success']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <div class="row row-social-networks">
+        <div class="table-responsive">
+            <div class="table table-thead-social-network">
+                <div class="thead social-network">
+                    <div class="th th-id">
+                        Id
+                    </div>                    
+                    <div class="th th-social-network">
+                        Nom
+                    </div>
+                    <div class="th th-link-page">
+                        Url de la page
+                    </div>
+                    <div class="th th-description">
+                        Description
+                    </div>
+                    <div class="th th-active">
+                        Actif
+                    </div>
+                    <div class="th th-actions">
+                        Actions
+                    </div>
+                </div>
+            </div>
+            <?php foreach ($socialNetworks as $socialNetwork) : ?>
+            <form action="index.php?page=updateSocial" method="POST">
+                <div class="tr">
+                    <div class="td id-network">
+                        <div class="text-id display-mobile">
+                            Id
+                        </div>
+                        <?= htmlspecialchars($socialNetwork['id']) ?>
+                        <input type="hidden" name="id" value="<?= htmlspecialchars($socialNetwork['id']) ?>" />
+                    </div>
+                    <div class="td network-logo">
+                        <div class="social-logo display-mobile">
+                            Logo
+                        </div>
+                        <img class="small-network-logo" src="../../www/assets/img/svg/icons/<?= htmlspecialchars($socialNetwork['network_img']) ?>" alt="<?= htmlspecialchars($socialNetwork['network_description']) ?>">
+                        <input type="hidden" name="logo" value="<?= htmlspecialchars($socialNetwork['network_img']) ?>"/>
+                    </div>
+                    <div class="td network-name">
+                        <div class="text-name display-mobile">
+                            Nom
+                        </div>
+                        <input type="text" name="networkName" value="<?= htmlspecialchars($socialNetwork['network_name']) ?>" size="15" required/>
+                    </div>
+                    <div class="td network-url">
+                        <div class="text-url display-mobile">
+                            Url de la page
+                        </div>
+                        <input type="text" name="networkUrl" value="<?= htmlspecialchars($socialNetwork['network_url']) ?>" size="50" required/>
+                    </div>
+                    <div class="td network-description">
+                        <div class="text-description display-mobile">
+                            Description
+                        </div>
+                        <input type="text" name="networkDescription" value="<?= htmlspecialchars($socialNetwork['network_description']) ?>" maxlength="40" size="40" required>
+                    </div>
+                    <div class="td active">
+                    <div class="text-active display-mobile">
+                            Activé
+                        </div>
+                        <?= htmlspecialchars($socialNetwork['active'] == 1) ? 'Oui' : 'Non' ?>
+                    </div>
+                    <div class="td action-active">
+                        <select name="active">
+                            <option value="0">Desactivé</option>
+                            <option value="1" selected>Activé</option>
+                        </select>
+                    </div>
+                    <div class="td span-action">
+                        <button class="btn-save" type="submit" name="submit"><i class="fas fa-save"></i></button>
+                    </div>
+                </div>
+            </form> 
+            <?php endforeach; ?>
+        </div>
+    </div>
+</article>
+<?php
+unset($_SESSION['formData']);
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>

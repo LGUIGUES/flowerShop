@@ -1,0 +1,79 @@
+<?php if (!isset($_SESSION["idAdmin"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<article>
+    <h2>Gestion des évènements de votre boutique</h2>
+    <p>Vous pouvez créer, modifier ou supprimer des évènements depuis cet espace.</p>
+    <nav class="breadcrumb">
+        <a class="first" href="index.php?page=dashBoard">Retour Tableau de bord</a>
+    </nav>
+    <div class="actions">
+        <a class="action-button" href="index.php?page=createShopEvent" title="Créer un évènement">Créer un évènement</a>
+    </div>
+    <?php if (array_key_exists('errors', $_SESSION)) : ?>
+        <div class="errors">
+            <?= '<ul>' . implode('<li>', $_SESSION['errors']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <?php if (array_key_exists('success', $_SESSION)) : ?>
+        <div class="success">
+            <?= '<ul>' . implode('<li>', $_SESSION['success']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <div class="row">
+        <div class="table-responsive">
+            <table class="events-list">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Visuel évènement</th>
+                        <th>Nom</th>
+                        <th>Date de démarrage</th>
+                        <th>Date de fin</th>
+                        <th>Activé</th>
+                        <th colspan="2">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($shopEvents as $shopEvent) : ?>
+                        <tr>
+                            <td><?= htmlspecialchars($shopEvent['id_event']) ?></td>
+                            <td>
+                                <div class="event">
+                                    <div class="event-img">
+                                        <img class="img-event" src="../../www/assets/img/event/miniature/<?= htmlspecialchars($shopEvent['img_event_miniature']) ?>" alt="<?= htmlspecialchars($shopEvent['title_shop_event']) ?>">
+                                        <div class="customize-event">
+                                            <h2 class="title-event"><?= htmlspecialchars($shopEvent['title_shop_event']) ?></h2>
+                                            <div class="description-event">
+                                                <?= strip_tags($shopEvent['description_shop_event'], $tags) ?>
+                                            </div>
+                                            <div class="date-event">
+                                                <h2>Du <?= htmlspecialchars(date('d-m-Y', strtotime($shopEvent['event_start']))) ?> au <?= htmlspecialchars(date('d-m-Y', strtotime($shopEvent['event_end']))) ?></h2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><?= htmlspecialchars($shopEvent['title_shop_event']) ?></td>
+                            <td><?= htmlspecialchars(date('d-m-Y', strtotime($shopEvent['event_start']))) ?></td>
+                            <td><?= htmlspecialchars(date('d-m-Y', strtotime($shopEvent['event_end']))) ?></td>
+                            <td><?= htmlspecialchars($shopEvent['active'] == 1) ? 'Oui' : 'Non' ?></td>
+                            <td><a class="btn-edit" href="index.php?page=updateShopEvent&idEvent=<?= htmlspecialchars($shopEvent['id_event']) ?>"><i class="fas fa-pencil-alt"></i></a></td>
+                            <td>
+                                <form action="index.php?page=deleteShopEvent" method="POST">
+                                    <input type="hidden" name="idEvent" value="<?= htmlspecialchars($shopEvent['id_event']) ?>" />
+                                    <button class="btn-delete" name="submit" type="submit"><i class="fas fa-trash-alt"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</article>
+<?php
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>

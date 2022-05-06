@@ -1,0 +1,64 @@
+<?php if (!isset($_SESSION["idAdmin"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<article>
+    <h2>Commandes clients</h2>
+    <p>Cette espace vous permet de visualiser les commandes reçues.</p>
+    <nav class="breadcrumb">
+        <a class="first" href="index.php?page=dashBoard">Retour Tableau de bord</a>
+    </nav>
+    <?php if (array_key_exists('errors', $_SESSION)) : ?>
+        <div class="errors">
+            <?= '<ul>' . implode('<li>', $_SESSION['errors']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <?php if (array_key_exists('success', $_SESSION)) : ?>
+        <div class="success">
+            <?= '<ul>' . implode('<li>', $_SESSION['success']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <div class="statistics">
+        <span class="icon-order">Total commandes valides : <?= htmlspecialchars($statOrders['numberOrders']) ?>
+        <span class="icon-cart">Panier Moyen : <?= number_format(htmlspecialchars($statOrders['totalSales']) / htmlspecialchars($statOrders['numberCustomer']), 2) ?> €</span>
+        <div class="info">
+            <span>Les commandes Annulées ne rentrent pas dans les statistiques.</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nom du client</th>
+                        <th class="td-mobile-hidden">Paiement</th>
+                        <th>Montant</th>
+                        <th class="td-mobile-hidden">Livraison</th>
+                        <th class="td-mobile-hidden">Etat</th>
+                        <th class="td-mobile-hidden">Date</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($orders as $order) : ?>
+                        <tr>
+                            <td><?= htmlspecialchars($order['id_order']) ?></td>
+                            <td><?= htmlspecialchars($order['customer']) ?></td>
+                            <td class="td-mobile-hidden"><?= htmlspecialchars($order['name_payment']) ?></td>
+                            <td><?= htmlspecialchars($order['total_amount']) ?> €</td>
+                            <td class="td-mobile-hidden"><?= htmlspecialchars($order['name_delivery']) ?></td>
+                            <td class="td-mobile-hidden"><?= htmlspecialchars($order['name_status']) ?></td>
+                            <td class="td-mobile-hidden"><?= htmlspecialchars(date('d-m-y H:i:s', strtotime($order['date_add']))) ?></td>
+                            <td><a class="btn-view view-order" href="index.php?page=viewOrderDetails&idOrder=<?= htmlspecialchars($order['id_order']) ?>"><i class="fas fa-eye"></i></a></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</article>
+<?php
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>

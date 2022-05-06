@@ -1,0 +1,75 @@
+<?php if(!isset($_SESSION["idAdmin"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<article>
+    <h2>Détails cours floral</h2>
+    <p>Voici en détails, les inscriptions à ce cours floral. Vous pouvez confirmer le cours ou l'annuler. Le statut est mis à jour dans l'espace personnalisé du client.</p>
+    <nav class="breadcrumb">
+    <a class="first" href="index.php?page=dashBoard">Retour Tableau de bord</a><span class="chevron">&gt;</span><a href="index.php?page=viewWorkshop">Gestion des cours floraux</a><span class="chevron">&gt;</span><span class="current-page">Détails d'un cours floral</span>
+    </nav>    
+    <?php if(array_key_exists('errors',$_SESSION)) : ?>
+        <div class="errors">
+            <?= '<ul>'.implode('<li>',$_SESSION['errors']).'</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <?php if(array_key_exists('success',$_SESSION)) : ?>
+        <div class="success">
+            <?= '<ul>'.implode('<li>',$_SESSION['success']).'</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <div class="actions">
+        <form id="confirmed" action="index.php?page=viewFlowerWorkshopDetails" method="POST">
+            <input type="hidden" name="idWork" value="<?= htmlspecialchars($_GET['idWork']) ?>">
+            <?php if(!empty($confirmedFlowerWorkshop == 0)) : ?> 
+                <button id="confirmed" class="action-button" name="submit" type="submit">Confirmer le cours aux clients</button>
+            <?php else : ?>
+                <p class="already-valided">Ce cours a été confirmé aux clients</p>
+            <?php endif; ?>    
+        </form>
+        <form id="canceled" action="index.php?page=cancelFlowerWorkshop" method="POST">
+            <input type="hidden" name="idWork" value="<?= htmlspecialchars($_GET['idWork']) ?>">
+            <?php if(!empty($canceledFlowerWorkshop == 0)) : ?> 
+                <button id="canceled" class="btn-form-cancel" name="cancel" type="submit">Annuler le cours</button>
+            <?php else : ?>
+                <p class="already-canceled">Vous avez déjà annulé ce cours</p>
+            <?php endif; ?>
+        </form>                             
+    </div>
+    <div class="row">
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Participants</th>
+                        <th>Date du cours</th>                        
+                        <th>Début du cours</th>
+                        <th>Fin du cours</th>
+                        <th>Tarif</th>
+                        <th>Confirmé au client</th>
+                        <th>Date</th>
+                        <th>Statut</th>                        
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach($flowerWorkshop as $flowerWorkshopDetails) :?>                    
+                <tr>
+                    <td><?= htmlspecialchars($flowerWorkshopDetails['firstname']).' '.htmlspecialchars($flowerWorkshopDetails['lastname']) ?></td>                        
+                    <td><?= htmlspecialchars(date('d-m-y', strtotime($flowerWorkshopDetails['work_date'] ))) ?></td>                                       
+                    <td><?= htmlspecialchars($flowerWorkshopDetails['time_start']) ?> h</td>
+                    <td><?= htmlspecialchars($flowerWorkshopDetails['time_end']) ?> h</td>
+                    <td><?= htmlspecialchars($flowerWorkshopDetails['price_tax']) ?> €</td>
+                    <td><?= !empty($flowerWorkshopDetails['confirmed'] == 0) ? 'Non' : 'Oui' ?></td>
+                    <td><?= !empty($flowerWorkshopDetails['date_upd']) ? htmlspecialchars(date('d-m-Y', strtotime($flowerWorkshopDetails['date_upd']))) : ' - ' ?></td>
+                    <td><?= !empty($flowerWorkshopDetails['canceled'] == 1) ? 'Annulé' : 'En cours' ?></td>                                          
+                </tr>                    
+                <?php endforeach; ?> 
+                </tbody>
+            </table>
+        </div>
+    </div>      
+</article>
+<?php
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>    

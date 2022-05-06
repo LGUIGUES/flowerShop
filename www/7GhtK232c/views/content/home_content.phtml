@@ -1,0 +1,63 @@
+<?php if(!isset($_SESSION["idAdmin"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<article>
+    <h2>Gestion des pages de contenu</h2>
+    <p>Vous pouvez créer ou modifier des pages de contenu pour votre boutique. Exemple : présentation, CGV, mentions légales...</p>
+    <nav class="breadcrumb">
+        <a class="first" href="index.php?page=dashBoard">Retour Tableau de bord</a>
+    </nav>
+    <?php if(array_key_exists('errors',$_SESSION)) : ?>
+        <div class="errors">
+            <?= '<ul>'.implode('<li>',$_SESSION['errors']).'</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <?php if(array_key_exists('success',$_SESSION)) : ?>
+        <div class="success">
+            <?= '<ul>'.implode('<li>',$_SESSION['success']).'</ul>'; ?>
+        </div>
+    <?php endif; ?>    
+<p>Sélectionnez dans la liste ci-dessous le type de page que vous voulez modifier. Les titres de certaines pages de base de votre boutique ne sont pas modifiables ni supprimables.</p>
+<div class="row">
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <td>Titre de la page</td>                
+                    <td>Ajoutée</td>
+                    <td>Modifiée</td>                
+                    <td>Emplacement de la Page</td>
+                    <td>Activée</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($contentPages as $page) : ?>
+                <tr>
+                    <td><a href="index.php?page=updatePage&idPage=<?= htmlspecialchars($page['id_page']) ?>&deletable=<?= htmlspecialchars($page['deletable']) ?>"><?= htmlspecialchars($page['title_content']) ?></a></td>                
+                    <td><?= htmlspecialchars(date('d-m-y', strtotime($page['date_add']))) ?></td>
+                    <td><?= htmlspecialchars(date('d-m-y', strtotime($page['date_upd']))) ?></td>
+                    <td><?= htmlspecialchars($page['name_location']) ?></td>
+                    <td><?= htmlspecialchars($page['active'] == 1) ? 'Oui' : 'Non' ?></td>
+                    <?php if($page['deletable'] != 0) : ?>
+                    <td><a class="btn-delete" href="index.php?page=deletePage&idPage=<?= htmlspecialchars($page['id_page']) ?>"><i class="fas fa-trash-alt"></i></a></td>
+                    <?php else : ?>
+                    <td><i class="fas fa-trash-alt btn-disabled"></i></td>
+                    <?php endif; ?>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+<p>Vous pouvez créer une nouvelle page de contenu en cliquant sur le lien ci-dessous.</p>
+<div class="actions">
+    <a class="action-button" href="index.php?page=createPage">Créer une nouvelle page</a>                     
+</div>
+</article>
+<?php
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>    
+    

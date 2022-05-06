@@ -1,0 +1,26 @@
+<?php if(!isset($_SESSION["idAdmin"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<article>
+    <h2>Gestion de la page d'accueil de votre boutique</h2>
+    <p>Cette espace vous permet de gérer la page d'accueil.</p>
+    <nav class="breadcrumb">
+        <a class="first" href="index.php?page=dashBoard">Retour Tableau de bord</a><span class="chevron">&gt;</span><span class="current-page">Gestion page d'accueil</span>
+    </nav>
+    <?php if(array_key_exists('errors',$_SESSION)) : ?>
+        <div class="errors">
+            <?= '<ul>'.implode('<li>',$_SESSION['errors']).'</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <?php if(array_key_exists('success',$_SESSION)) : ?>
+        <div class="success">
+            <?= '<ul>'.implode('<li>',$_SESSION['success']).'</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <p>En cours de développement.</p>
+</article>
+<?php
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>    

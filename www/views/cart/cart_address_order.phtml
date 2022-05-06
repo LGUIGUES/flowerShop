@@ -1,0 +1,81 @@
+<?php if(!isset($_SESSION["idUser"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<!-- Affichage panier -->
+<article>    
+    <div class="row-cart">
+        <div class="list-cart">
+            <div class="card-cart">
+                <div class="cart-title">
+                    <h3>Votre panier</h3>
+                    <span><?= !empty($_SESSION['basket']) ? '' : 'est vide...' ?></span>
+                </div>
+                <?php if(array_key_exists('errors', $_SESSION)) : ?>
+                <div class="errors">
+                    <?= '<ul>'.implode('<li>',$_SESSION['errors']).'</ul>'; ?>
+                </div>
+                <?php endif; ?>
+                <?php if(array_key_exists('success', $_SESSION)) : ?>
+                <div class="success">
+                    <?= '<ul>'.implode('<li>',$_SESSION['success']).'</ul>'; ?>
+                </div>
+                <?php endif; ?>
+                <div class="actions">
+                    <a class="action-button" href="index.php?page=addUserAddress&id=<?= htmlspecialchars($_SESSION['idUser']) ?>" title="Ajouter une nouvelle adresse">Ajouter une nouvelle adresse</a>
+                </div>
+                <!-- Affichage adresse client -->    
+                <form action="index.php?page=cartOrder" method="POST">            
+                    <div class="addresses">
+                        <?php foreach($addresses as $address) : ?>            
+                        <address class="row card-address">
+                            <div class="text-align-center title-address">
+                                <label>Choisir cette adresse</label>
+                            <input type="radio" name="idAddress" value="<?= htmlspecialchars($address['id_address']) ?>"/> 
+                                <span class="address-alias"><?= htmlspecialchars($address['alias']) ?></span>                    
+                            </div>                                                       
+                                <p><?= htmlspecialchars($address['lastname']) ?></p>
+                                <p><?= htmlspecialchars($address['firstname']) ?></p>
+                                <p><?= htmlspecialchars($address['company']) ?></p>
+                                <p><?= htmlspecialchars($address['addresse']) ?></p>
+                                <p><?= htmlspecialchars($address['address_comp']) ?></p>
+                                <p><?= htmlspecialchars($address['zip_code']) ?></p>
+                                <p><?= htmlspecialchars($address['city']) ?></p>
+                                <p><?= htmlspecialchars($address['country']) ?></p>
+                                <p><?= htmlspecialchars($address['phone']) ?></p>
+                            <div class="action">
+                                <a href="index.php?page=updateUserAddress&id=<?= htmlspecialchars($address['id_address']) ?>" title="Modifier">Modifier</a>
+                                    <span> ou </span>
+                                <a href="index.php?page=deleteUserAddress&id=<?= htmlspecialchars($address['id_address']) ?>" title="Supprimer">Supprimer</a>
+                            </div>
+                        </address>   
+                        <?php endforeach; ?>
+                    </div>
+                    <!-- Affichage choix mode de livraison -->                    
+                    <div class="delivery-method">
+                        <h3>Mode de livraison</h3>
+                        <div class="choice-delivery">
+                            <input type="radio" name="deliveryMethod" id="deliveryMethod" value="1"/>
+                            <label for="deliveryMethod">Retrait sur place</label>
+                        </div>                        
+                    </div>
+                    <!-- Affichage choix mode de paiement -->
+                    <div class="payment-method">
+                        <h3>Moyen de Paiement</h3>
+                        <div class="choice-payment">
+                            <input type="radio" name="paymentMethod" id="paymentMethod" value="1"/>
+                            <label for="paymentMethod">Paiement en magasin</label>
+                        </div>                        
+                    </div>                
+                    <div class="cart-action-order">
+                        <button class="btn-action" name="submit" type="submit"><?= isset($_SESSION['idUser']) ? "Valider la commande" : "Commander" ?></button>                    
+                    </div>
+                </fomr>            
+            </div>        
+        </div>
+    </div>
+</article>
+<?php
+unset($_SESSION['errors']);
+unset($_SESSION['success']); 
+?>

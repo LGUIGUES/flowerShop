@@ -1,0 +1,152 @@
+<?php if (!isset($_SESSION["idAdmin"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<article>
+    <h2>Configuration de votre Boutique</h2>
+    <p>Vous pouvez configurer les informations liées à votre boutique dans cet espace. Choisissez les informations à mettre à jour.</p>
+    <nav class="breadcrumb">
+        <a class="first" href="index.php?page=dashBoard">Retour Tableau de bord</a>
+    </nav>
+    <?php if (array_key_exists('errors', $_SESSION)) : ?>
+        <div class="errors">
+            <?= '<ul>' . implode('<li>', $_SESSION['errors']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <?php if (array_key_exists('success', $_SESSION)) : ?>
+        <div class="success">
+            <?= '<ul>' . implode('<li>', $_SESSION['success']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <div class="global-information">
+        <div class="actions">
+            <a class="action-button" href="index.php?page=contentPages">Modifier mes pages de contenu (CGV, Mentions légales...)</a>
+        </div>
+        <div class="row company" id="company">
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="2">Les données actuelles de votre entreprise</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Nom</td>
+                            <td><?= htmlspecialchars($shopInformation['company']) ?></td>
+                        </tr>
+                        <tr>
+                            <td>Responsable</td>
+                            <td><?= htmlspecialchars($shopInformation['gender_name']) . ' ' . htmlspecialchars($shopInformation['firstname']) . ' ' . htmlspecialchars($shopInformation['lastname']) ?></td>
+                        </tr>
+                        <tr>
+                            <td>Adresse</td>
+                            <td><?= htmlspecialchars($shopInformation['addresse']) . ' - ' . htmlspecialchars($shopInformation['zip_code']) . ' ' . htmlspecialchars($shopInformation['city']) ?></td>
+                        </tr>
+                        <tr>
+                            <td>Téléphone</td>
+                            <td><?= htmlspecialchars($shopInformation['phone']) ?></td>
+                        </tr>
+                        <tr>
+                            <td>Siège social</td>
+                            <td><?= htmlspecialchars($shopInformation['country']) ?></td>
+                        </tr>
+                        <tr>
+                            <td>Immatriculation</td>
+                            <td>Siret <?= htmlspecialchars($shopInformation['siret']) . ' - RCS de ' . htmlspecialchars($shopInformation['rcs']) ?></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="map-container">
+                <iframe class="map-frame" src="<?= htmlspecialchars($shopInformation['localization_map']) ?>" width="600" height="400" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+        <div class="btn-form">
+            <a class="btn-form-submit" href="index.php?page=updateShop">Mettre à jour mon entreprise</a>
+        </div>
+        <div class="row social-networks" id="social-networks">
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="4">Vos réseaux sociaux activés</th>
+                        </tr>
+                        <tr>
+                            <td>Logo</td>
+                            <td>Réseau social</td>
+                            <td>Lien url vers votre page</td>
+                            <td>Description du logo</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($socialNetworks as $socialNetwork) : ?>
+                            <tr>
+                                <td><img class="thumbnail" src="../../www/assets/img/svg/icons/<?= htmlspecialchars($socialNetwork['network_img']) ?>" alt="<?= htmlspecialchars($socialNetwork['network_description']) ?>"></td>
+                                <td><?= htmlspecialchars($socialNetwork['network_name']) ?></td>
+                                <td><?= htmlspecialchars($socialNetwork['network_url']) ?></td>
+                                <td><?= htmlspecialchars($socialNetwork['network_description']) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="btn-form">
+            <a class="btn-form-submit" href="index.php?page=updateSocial">Mettre à jour mes réseaux sociaux</a>
+        </div>
+        <div class="row work-hours" id="workHours">
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="5">Vos horaires d'ouvertures</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($workingHours as $workingHour) : ?>
+                            <tr>
+                                <td><?= htmlspecialchars($workingHour['day']) ?></td>
+                                <td><?= htmlspecialchars($workingHour['hour_morning_start']) ?></td>
+                                <td><?= htmlspecialchars($workingHour['hour_morning_end']) ?></td>
+                                <td><?= htmlspecialchars($workingHour['hour_afternoon_start']) ?></td>
+                                <td><?= htmlspecialchars($workingHour['hour_afternoon_end']) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="btn-form">
+            <a class="btn-form-submit" href="index.php?page=updateWorkHour">Mettre à jour mes horaires</a>
+        </div>
+    </div>
+    <div class="row services" id="services">
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="4">Vos services</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($shopServices as $service) : ?>
+                        <tr>
+                            <td><?= htmlspecialchars($service['title_service']) ?></td>
+                            <td><?= htmlspecialchars($service['active'] == 1) ? 'Oui' : 'Non' ?></td>
+                            <td><a class="btn-edit" href="index.php?page=updateShopService&idService=<?= htmlspecialchars($service['id_service']) ?>"><i class="fas fa-pencil-alt"></i></a></td>
+                            <td><a class="btn-delete" href="index.php?page=deleteShopService&idService=<?= htmlspecialchars($service['id_service']) ?>"><i class="fas fa-trash-alt"></i></a></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="actions">
+        <a class="action-button" href="index.php?page=createShopService">Créer un nouveau service</a>
+    </div>
+</article>
+<?php
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>

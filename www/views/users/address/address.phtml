@@ -1,0 +1,46 @@
+<?php if(!isset($_SESSION["idUser"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<!-- Affichage page gestion des adresses utilisateur -->
+<article>
+    <div class="row account-user">
+    <h2>Gestion de vos adresses</h2>
+    <p>Vous pouvez ajouter ou modifier vos adresses depuis cette espace</p>
+    <nav class="breadcrumb">
+    <a class="first" href="index.php" title="Accueil">Accueil</a><span class="chevron">&gt;</span><a href="index.php?page=customer_account" title="Retour à votre espace personnel">Retour à votre espace personnel</a><span class="chevron">&gt;</span><span class="current-page">Vos addresses</span>
+    </nav>
+        <?php if(array_key_exists('success', $_SESSION)) : ?>
+            <div class="success">
+                <?= '<ul>'.implode('<li>',$_SESSION['success']).'</ul>'; ?>
+            </div>
+        <?php endif; ?> 
+    <div class="actions">
+        <a class="action-button" href="index.php?page=addUserAddress" title="Ajouter une nouvelle adresse">Ajouter une nouvelle adresse</a>
+    </div>    
+        <div class="addresses">           
+            <?php foreach($addresses as $address) : ?>            
+            <address class="row card-address">
+                <div class="text-align-center title-address">
+                    <span class="address-alias"><?= htmlspecialchars($address['alias']) ?></span>                    
+                </div>                             
+                <p><?= htmlspecialchars($address['lastname']) ?></p>
+                <p><?= htmlspecialchars($address['firstname']) ?></p>
+                <p><?= htmlspecialchars($address['company']) ?></p>
+                <p><?= htmlspecialchars($address['addresse']) ?></p>
+                <p><?= htmlspecialchars($address['address_comp']) ?></p>
+                <p><?= htmlspecialchars($address['zip_code']) ?></p>
+                <p><?= htmlspecialchars($address['city']) ?></p>
+                <p><?= htmlspecialchars($address['country']) ?></p>
+                <p><?= htmlspecialchars($address['phone']) ?></p>
+                <div class="actions">
+                    <a class="action-button" href="index.php?page=updateUserAddress&id=<?= htmlspecialchars($address['id_address']) ?>" title="Mettre à jour">Mettre à jour</a><a class="action-button-delete" href="index.php?page=deleteUserAddress&id=<?= htmlspecialchars($address['id_address']) ?>" title="supprimer">Supprimer</a>
+                </div>
+            </address>   
+            <?php endforeach; ?>
+        </div>
+    </div>
+</article>
+<?php
+unset($_SESSION['success']);
+?>

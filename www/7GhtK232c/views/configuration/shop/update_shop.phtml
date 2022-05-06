@@ -1,0 +1,159 @@
+<?php if(!isset($_SESSION["idAdmin"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<article>
+    <h2>Gestion des informations sur votre boutique</h2>
+    <p>Cet espace vous permet de renseigner les informations sur votre société.</p>
+    <nav class="breadcrumb">
+    <a class="first" href="index.php?page=dashBoard">Retour Tableau de bord</a><span class="chevron">&gt;</span><a href="index.php?page=configuration">Retour page configuration</a><span class="chevron">&gt;</span><span class="current-page">Mise à jour informations société</span>
+    </nav>
+    <?php if(array_key_exists('errors',$_SESSION)) : ?>
+        <div class="errors">
+            <?= '<ul>'.implode('<li>',$_SESSION['errors']).'</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <?php if(array_key_exists('success',$_SESSION)) : ?>
+        <div class="success">
+            <?= '<ul>'.implode('<li>',$_SESSION['success']).'</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <form action="index.php?page=updateShop" method="POST">
+    <div class="flex-form">
+        <fieldset>
+            <input type="hidden" name="id" value="<?= htmlspecialchars($shopInformation['id']) ?>">
+        <div class="grp-input-radio">
+            <label class="required">Civilité</label>           
+            <label class="radio-inline">
+                <span class="custom-radio">
+                    <input type="radio" name="gender" id="H" value="1" <?= isset($shopInformation['id_gender']) && htmlspecialchars($shopInformation['id_gender'] == 1) ? 'checked="checked"' : '' ?>/>
+                </span>M 
+            </label>
+            <label class="radio-inline">
+                <span class="custom-radio">
+                    <input type="radio" name="gender" id="F" value="2" <?= isset($shopInformation['id_gender']) && htmlspecialchars($shopInformation['id_gender'] == 2) ? 'checked="checked"' : '' ?>/>
+                </span>Mme 
+            </label>            
+        </div>
+            <div class="grp-btn">
+            <label class="required" for="lastName">Nom</label>
+            <?php if(isset($_SESSION['formData']['lastName'])) : ?>
+            <input type="text" name="lastName" id="lastName" value="<?= htmlspecialchars($_SESSION['formData']['lastName']) ?>" required/>
+            <?php else : ?>
+                <input type="text" name="lastName" id="lastName" value="<?= htmlspecialchars($shopInformation['lastname']) ?>" required/>
+            <?php endif; ?>    
+        </div>
+        <div class="grp-btn">
+            <label class="required" for="firstName">Prénom</label>
+            <?php if(isset($_SESSION['formData']['firstName'])) : ?>
+            <input type="text" name="firstName" id="firstName" value="<?= htmlspecialchars($_SESSION['formData']['firstName']) ?>" required/>
+            <?php else : ?>
+                <input type="text" name="firstName" id="firstName" value="<?= htmlspecialchars($shopInformation['firstname']) ?>" required/>
+            <?php endif; ?>                
+        </div>
+        <div class="grp-btn">
+            <label for="capacity">Fonction</label>
+            <?php if(isset($_SESSION['formData']['capacity'])) : ?>
+            <input type="text" name="capacity" id="capacity" value="<?= htmlspecialchars($_SESSION['formData']['capacity']) ?>"/>
+            <?php else : ?>
+                <input type="text" name="capacity" id="capacity" value="<?= htmlspecialchars($shopInformation['capacity']) ?>"/>
+            <?php endif; ?>
+        </div>
+        <div class="grp-btn">
+            <label for="company">Société</label>
+            <?php if(isset($_SESSION['formData']['company'])) : ?>
+            <input type="text" name="company" id="company" value="<?= htmlspecialchars($_SESSION['formData']['company']) ?>"/>
+            <?php else : ?>
+                <input type="text" name="company" id="company" value="<?= htmlspecialchars($shopInformation['company']) ?>"/>
+            <?php endif; ?>
+        </div>
+        <div class="grp-btn">
+            <label class="required" for="address">Adresse</label>
+            <?php if(isset($_SESSION['formData']['address'])) : ?>
+            <input type="text" name="address" id="address" value="<?= htmlspecialchars($_SESSION['formData']['address']) ?>" size="40"/>
+            <?php else : ?>
+                <input type="text" name="address" id="address" value="<?= htmlspecialchars($shopInformation['addresse']) ?>" size="40"/>
+            <?php endif; ?>
+        </div>
+        <div class="grp-btn">
+            <label class="required" for="zipCode">Code postal</label>
+            <?php if(isset($_SESSION['formData']['formData']['zipCode'])) : ?>
+            <input type="text" name="zipCode" id="zipCode" value="<?= htmlspecialchars($_SESSION['formData']['zipCode']) ?>" pattern="[0-9]{5}"/>
+            <?php else : ?>
+                <input type="text" name="zipCode" id="zipCode" value="<?= htmlspecialchars($shopInformation['zip_code']) ?>" placeholder="01000" pattern="[0-9]{5}"/>
+            <?php endif; ?>
+        </div>
+        <div class="grp-btn">
+            <label class="required" for="city">Ville</label>
+            <?php if(isset($_SESSION['formData']['city'])) : ?>
+            <input type="text" name="city" id="city" value="<?= htmlspecialchars($_SESSION['formData']['city']) ?>"/>
+            <?php else : ?>
+                <input type="text" name="city" id="city" value="<?= htmlspecialchars($shopInformation['city']) ?>"/>
+            <?php endif; ?>
+        </div>
+        <div class="grp-btn">
+            <label class="required" for="country">Pays</label>
+            <?php if(isset($_SESSION['formData']['country'])) : ?>
+            <input type="text" name="country" id="country" value="<?= htmlspecialchars($_SESSION['formData']['country']) ?>"/>
+            <?php else : ?>
+                <input type="text" name="country" id="country" value="<?= htmlspecialchars($shopInformation['country']) ?>"/>
+            <?php endif; ?>
+        </div>
+        <div class="grp-btn">
+            <label class="required" for="phone">Téléphone</label>
+            <?php if(isset($_SESSION['formData']['phone'])) : ?>
+            <input type="text" name="phone" id="phone" value="<?= htmlspecialchars($_SESSION['formData']['phone']) ?>" pattern="0[1-68]([. ]?[0-9]{2}){4}"/>
+            <?php else : ?>
+                <input type="text" name="phone" id="phone" value="<?= htmlspecialchars($shopInformation['phone']) ?>" placeholder="01.02.03.04.05" pattern="0[1-68]([. ]?[0-9]{2}){4}"/>
+            <?php endif; ?>
+        </div>
+        <div class="grp-btn">
+            <label class="required" for="siret">N° de siret</label>
+            <?php if(isset($_SESSION['formData']['siret'])) : ?>
+            <input type="text" name="siret" id="siret" value="<?= htmlspecialchars($_SESSION['formData']['siret']) ?>" pattern="[0-9]{14}"/>
+            <?php else : ?>
+                <input type="text" name="siret" id="siret" value="<?= htmlspecialchars($shopInformation['siret']) ?>" placeholder="Siret sur 14 chiffres" pattern="[0-9]{14}"/>
+            <?php endif; ?>
+        </div>
+        <div class="grp-btn">
+            <label class="required" for="rcs">RCS de</label>
+            <?php if(isset($_SESSION['formData']['rcs'])) : ?>
+            <input type="text" name="rcs" id="rcs" value="<?= htmlspecialchars($_SESSION['formData']['rcs']) ?>"/>
+            <?php else : ?>
+                <input type="text" name="rcs" id="rcs" value="<?= htmlspecialchars($shopInformation['rcs']) ?>"/>
+            <?php endif; ?>
+        </div>
+        <div class="grp-btn">
+            <label for="homePageTeaserTitle">Titre d'accroche page d'accueil</label>
+            <?php if(isset($_SESSION['formData']['homePageTeaserTitle'])) : ?>
+            <input type="text" name="homePageTeaserTitle" id="homePageTeaserTitle" value="<?= htmlspecialchars($_SESSION['formData']['homePageTeaserTitle']) ?>" size="50"/>
+            <?php else : ?>
+                <input type="text" name="homePageTeaserTitle" id="homePageTeaserTitle" value="<?= htmlspecialchars($shopInformation['homepage_teaser_title']) ?>" size="50"/>
+            <?php endif; ?>
+        </div>
+        </fieldset>
+        <fieldset>
+            <p>Ci-dessous, vous pouvez modifier le lien google maps de votre adresse.</p>
+            <label class="required">Lien Google Maps</label>
+            <?php if(isset($_SESSION['formData']['localizationMap'])) : ?>
+            <textarea class="map" name="localizationMap" id="localizationMap" cols="60" rows="10" required>
+                <?= htmlspecialchars($_SESSION['formData']['localizationMap']) ?>
+            </textarea>                
+            <?php else : ?>
+                <textarea class="map" name="localizationMap" id="localizationMap" cols="60" rows="10" required>
+                    <?= htmlspecialchars($shopInformation['localization_map']) ?>
+                </textarea>                    
+            <?php endif; ?>
+        </fieldset>                
+            <div class="btn-form">
+                <button class="btn-form-submit" id="btn-form-submit" type="submit" name="submit">Enregistrer</button>
+                <a class="btn-form-cancel" href="index.php?page=configuration">Annuler</a>
+            </div>
+        </div>
+    </form>
+</article>
+<?php
+unset($_SESSION['formData']);
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>

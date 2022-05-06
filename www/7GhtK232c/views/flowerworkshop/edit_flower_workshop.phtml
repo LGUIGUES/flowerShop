@@ -1,0 +1,65 @@
+<?php if (!isset($_SESSION["idAdmin"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<article>
+    <h2>Modification d'un cours floral</h2>
+    <p>Certaines informations de ce cours sont non modifiables.</p>
+    <nav class="breadcrumb">
+        <a class="first" href="index.php?page=dashBoard">Retour Tableau de bord</a><span class="chevron">&gt;</span><a href="index.php?page=viewWorkshop">Gestion des cours floraux</a><span class="chevron">&gt;</span><span class="current-page">Modification d'un cours floral</span>
+    </nav>
+    <?php if (array_key_exists('errors', $_SESSION)) : ?>
+        <div class="errors">
+            <?= '<ul>' . implode('<li>', $_SESSION['errors']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <?php if (array_key_exists('success', $_SESSION)) : ?>
+        <div class="success">
+            <?= '<ul>' . implode('<li>', $_SESSION['success']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <form action="index.php?page=editFlowerWorkshopDetails" method="POST">
+        <input type="hidden" name="idWork" value="<?= htmlspecialchars($flowerWorkshop['id_work']) ?>" />
+        <div class="flex-form">
+            <fieldset>
+                <div class="grp-btn">
+                    <label for="workDate">Date du cours floral</label>
+                    <input type="text" name="workDate" id="workDate" value="<?= htmlspecialchars(date('d-m-Y', strtotime($flowerWorkshop['work_date']))) ?>" disabled />
+                </div>
+                <div class="grp-btn">
+                    <label>Début du cours</label>
+                    <input type="text" value="<?= htmlspecialchars($flowerWorkshop['time_start']) ?> h" disabled />
+                    <label>fin du cours</label>
+                    <input type="text" value="<?= htmlspecialchars($flowerWorkshop['time_end']) ?> h" disabled />
+                    <div class="grp-btn">
+                        <label for="maxSpace">Nombre de participants maximum pour le cours (1 à 20)</label>
+                        <input type="number" name="maxSpace" id="maxSpace" min="<?= !empty($flowerWorkshop['max_space'] - $flowerWorkshop['space_available'] != 0) ? htmlspecialchars($flowerWorkshop['max_space'] - htmlspecialchars($flowerWorkshop['space_available'])) : '1' ?>" value="<?= htmlspecialchars($flowerWorkshop['max_space']) ?>" max="20" step="1" />
+                        <p>Il y a actuellement <?= htmlspecialchars($flowerWorkshop['max_space'] - htmlspecialchars($flowerWorkshop['space_available'])) ?><?= !empty($flowerWorkshop['max_space'] - $flowerWorkshop['space_available'] != 0) ? ' participants ' : ' participant ' ?>à ce cours. <?= !empty($flowerWorkshop['confirmed'] != 0) ? 'Attention : Vous avez confirmé ce cours.' : '' ?></p>
+                    </div>
+                    <div class="grp-btn">
+                        <label for="priceTax">Tarif du cours (TTC) en €</label>
+                        <input type="number" name="priceTax" id="priceTax" value="<?= htmlspecialchars($flowerWorkshop['price_tax']) ?>" />
+                    </div>
+                    <div class="grp-btn">
+                        <div class="workshop-status <?= !empty($flowerWorkshop['active']) == 1 ? "online" : "offline" ?>">
+                            <p>Ce cours est <?= !empty($flowerWorkshop['active']) == 1 ? "Activé" : "Désactivé" ?></p>
+                        </div>
+                        <label for="activeWork">Activer/Désactiver ce cours</label>
+                        <select name="activeWork" id="activeWork">
+                            <option value="1">Activer</option>
+                            <option value="0">Desactiver</option>
+                        </select>
+                    </div>
+                </div>    
+            </fieldset>
+            <div class="btn-form">
+                <button class="btn-form-submit" id="btn-form-submit" type="submit" name="submit">Enregistrer</button>
+                <a class="btn-form-cancel" href="index.php?page=viewWorkshop">Annuler</a>
+            </div>
+        </div>
+    </form>
+</article>
+<?php
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>

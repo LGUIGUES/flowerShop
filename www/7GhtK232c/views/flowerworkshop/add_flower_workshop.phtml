@@ -1,0 +1,89 @@
+<?php if (!isset($_SESSION["idAdmin"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<article>
+    <h2>Gestion des cours floraux</h2>
+    <p>Vous pouvez suivre les réservations aux cours floraux. Ajouter, modifier ou supprimer des cours.</p>
+    <p>Note : Vous pouvez ajouter un cours jusqu'à 60 jours maximum à l'avance.</p>
+    <nav class="breadcrumb">
+        <a class="first" href="index.php?page=dashBoard">Retour Tableau de bord</a><span class="chevron">&gt;</span><a href="index.php?page=viewWorkshop">Gestion des cours floraux</a><span class="chevron">&gt;</span><span class="current-page">Ajout d'un cours floral</span>
+    </nav>
+    <?php if (array_key_exists('errors', $_SESSION)) : ?>
+        <div class="errors">
+            <?= '<ul>' . implode('<li>', $_SESSION['errors']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <?php if (array_key_exists('success', $_SESSION)) : ?>
+        <div class="success">
+            <?= '<ul>' . implode('<li>', $_SESSION['success']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <form action="index.php?page=createFlowerWorkshop" method="POST">
+        <div class="flex-form">
+            <fieldset>
+                <div class="grp-btn">
+                    <label for="workDate">Date du cours floral</label>
+                    <input type="date" name="workDate" id="workDate" value="<?= date('Y-m-d'); ?>" min="<?= date('Y-m-d'); ?>" max="<?= date('Y-m-d', strtotime(' + 60 days')); ?>" required />
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="timeStart">Début du cours</label>
+                    <select name="timeStart" id="timeStart" required>
+                        <option value="">Choisir heure de début</option>
+                        <option value="10">10 heures</option>
+                        <option value="11">11 heures</option>
+                        <option value="12">12 heures</option>
+                        <option value="13">13 heures</option>
+                        <option value="14">14 heures</option>
+                        <option value="15">15 heures</option>
+                        <option value="16">16 heures</option>
+                        <option value="17">17 heures</option>
+                        <option value="18">18 heures</option>
+                        <option value="19">19 heures</option>
+                        <option value="20">20 heures</option>
+                        <option value="21">21 heures</option>
+                    </select>
+                    <label class="required" for="timeEnd">fin du cours</label>
+                    <select name="timeEnd" id="timeEnd" required>
+                    <option value="">Choisir heure de fin</option>
+                        <option value="11">11 heures</option>
+                        <option value="12">12 heures</option>
+                        <option value="13">13 heures</option>
+                        <option value="14">14 heures</option>
+                        <option value="15">15 heures</option>
+                        <option value="16">16 heures</option>
+                        <option value="17">17 heures</option>
+                        <option value="18">18 heures</option>
+                        <option value="19">19 heures</option>
+                        <option value="20">20 heures</option>
+                        <option value="21">21 heures</option>
+                        <option value="22">22 heures</option>
+                    </select>
+                    <div class="grp-btn">
+                        <label class="required" for="maxSpace">Nombre de participants maximum pour le cours (1 à 20)</label>
+                        <input type="number" name="maxSpace" id="maxSpace" min="1" max="20" step="1" required />
+                    </div>
+                    <div class="grp-btn">
+                        <label class="required" for="priceTax">Tarif du cours (TTC) en €</label>
+                        <input type="number" name="priceTax" id="priceTax" required />
+                    </div>
+                    <div class="grp-btn">
+                        <label class="required" for="activeWork">Activer/Désactiver ce cours</label>
+                        <select name="activeWork" id="activeWork">
+                            <option value="1">Activer</option>
+                            <option value="0">Désactiver</option>
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="btn-form">
+                <button class="btn-form-submit" id="btn-form-submit" type="submit" name="submit">Enregistrer</button>
+                <a class="btn-form-cancel" href="index.php?page=viewWorkshop">Annuler</a>
+            </div>
+        </div>
+    </form>
+</article>
+<?php
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>

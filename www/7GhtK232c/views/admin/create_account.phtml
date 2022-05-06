@@ -1,0 +1,54 @@
+<form class="login-panel" action="index.php?page=createAdmin" method="POST">
+    <h2>Création d'un administrateur</h2>
+    <?php if(array_key_exists('errors', $_SESSION)) : ?>
+    <div class="errors">
+        <?= '<ul>'.implode('<li>',$_SESSION['errors']).'</ul>'; ?>
+    </div>
+    <?php endif; ?>
+    <?php if(array_key_exists('success',$_SESSION)) : ?>
+    <div class="success"><?= '<ul>'.implode('<li>',$_SESSION['success']).'</ul>'; ?>
+    </div>
+    <?php endif; ?>
+  <div class="col-md-4">
+    <label for="lastname" class="form-label">Nom</label>
+    <?php if(isset($_SESSION['formData']['lastname'])) : ?>
+    <input type="text" class="required" name="lastname" id="lastname" value="<?= htmlspecialchars($_SESSION['formData']['lastname']) ?>" required>
+    <?php else : ?>
+      <input type="text" class="required" name="lastname" id="lastname" placeholder="Votre nom" required>
+      <?php endif; ?>
+  </div>  
+  <div class="col-md-4">
+    <label for="firstname" class="form-label">Prénom</label>
+    <?php if(isset($_SESSION['formData']['firstname'])) : ?>
+    <input type="text" class="required" name="firstname" id="firstname" value="<?= htmlspecialchars($_SESSION['formData']['firstname']) ?>" required>
+    <?php else : ?>
+      <input type="text" class="required" name="firstname" id="firstname" placeholder="Votre prénom" required>
+      <?php endif; ?>    
+  </div>  
+  <div class="col-md-4">
+    <label for="email" class="form-label">Email</label>    
+    <?php if(isset($_SESSION['formData']['email'])) : ?>
+    <input type="email" class="required" name="email" id="email" value="<?= htmlspecialchars($_SESSION['formData']['email']) ?>" required>
+    <?php else : ?>
+      <input type="email" class="required" name="email" id="email" placeholder="votre@email.fr" required>
+      <?php endif; ?>      
+  </div>  
+  <div class="col-md-4">
+    <label for="password" class="form-label">Mot de passe</label>
+    <input type="password" class="required password" name="password" id="password" placeholder="entre 8 et 20 caractères" pattern=".{8,20}" required>
+    <span class="view-pass" id="viewPassword"></span>    
+  </div>  
+  <div class="col-md-4">
+    <label for="repassword" class="form-label">Confirmez votre mot de passe</label>
+    <input type="password" class="required password" name="repassword" id="newPassword" placeholder="Confirmez le mot de passe" pattern=".{8,20}" required>
+    <span class="view-pass" id="viewNewPassword"></span>    
+  </div>  
+  <div class="col-12 login">
+    <button class="btn-form-submit" name="submit" type="submit">Création du compte</button>
+  </div>  
+</form>
+<?php
+unset($_SESSION['formData']);
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>

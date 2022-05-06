@@ -1,0 +1,14 @@
+<!-- Affichage page des services -->
+<article>
+    <div class="row services">
+    <h2><?= htmlspecialchars($contentServices['title_content']) ?></h2>
+    <div><?= strip_tags($contentServices['text_content'],$tags) ?></div>
+    <?php foreach($shopServices as $service) : ?>
+        <div class="service">
+            <h3><?= htmlspecialchars($service['title_service']) ?></h3>
+            <p><?= strip_tags($service['description_service'],$tags) ?></p>
+            <div class="tirets"></div>
+        </div>
+    <?php endforeach; ?>
+    </div>    
+</article>

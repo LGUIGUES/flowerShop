@@ -1,0 +1,86 @@
+<?php if (!isset($_SESSION["idAdmin"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<article>
+    <h2>Modification ou suppression de vos images</h2>
+    <p>Vous pouvez modifier la description de vos images. Cette description est utilisée pour afficher un texte si l'image n'est pas disponible. Mais vous pouvez également supprimer vos images depuis cette page.</p>
+    <?php if (isset($_POST['message'])) : ?>
+        <div class="message"><?= htmlspecialchars($_POST['message']) ?></div>
+    <?php endif; ?>
+    <?php if (isset($_GET['message'])) : ?>
+        <div class="message"><?= htmlspecialchars($_GET['message']) ?></div>
+    <?php endif; ?>
+    <?php if (array_key_exists('id', $_GET) && is_numeric($_GET['id'])) : ?>
+        <nav class="breadcrumb">
+            <a class="first" href="index.php?page=dashBoard">Retour Tableau de bord</a><span class="chevron">&gt;</span><a href="index.php?page=gallery">Retour gestion images</a><span class="chevron">&gt;</span><span class="current-page">Modification ou suppression d'image</span>
+        </nav>
+        <div class="row row-update-image">
+            <div class="table-responsive">
+                <div class="table">
+                    <div class="thead update-image">
+                        <span class="th th-id">
+                            Id
+                        </span>
+                        <span class="th th-image">
+                            Image
+                        </span>
+                        <span class="th th-category">
+                            Catégorie image
+                        </span>
+                        <span class="th th-description">
+                            Description
+                        </span>
+                        <span class="th th-actions">
+                            Actions
+                        </span>               
+                    </div>
+                </div>                
+                <?php foreach ($imagesCategory as $images) : ?>
+                    <form class="table" action="index.php?page=updateImage" method="POST">                        
+                        <div class="tr">
+                            <span class="td span-id">
+                                <span class="text-id display-mobile">Id</span><span><?= htmlspecialchars($images['id']) ?></span>
+                                <input type="hidden" name="idImage" value="<?= htmlspecialchars($images['id']) ?>">
+                            </span>
+                            <span class="td span-image">
+                                <img class="img-update" src="../../www/assets/img/gallery/category/<?= htmlspecialchars($images['orientation']) . '/' . htmlspecialchars($images['name_category']) ?>" alt="<?= htmlspecialchars($images['description_image']) ?>" />
+                            </span>
+                            <span class="td span-category">
+                                <select name="idCategory">
+                                    <option value="">Choix catégorie</option>
+                                    <?php foreach ($categorys as $category) : ?>
+                                        <option value="<?= htmlspecialchars($category['id_category']) ?>"><?= htmlspecialchars($category['category_name']) ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </span>
+                            <span class="td span-description">
+                                <input class="input-category" type="text" name="imageDescription" placeholder="<?= htmlspecialchars($images['description_image']) ?>" maxlength="40" size="30" />
+                            </span>
+                            <span class="td span-actions">
+                                <button class="btn-save" name="update" type="submit"><i class="fas fa-save"></i></button>                                                           
+                                <button class="btn-delete" name="delete" type="submit"><i class="fas fa-trash-alt"></i></button>
+                            </span>
+                        </div>                                              
+                    </form>
+                <?php endforeach; ?>
+            </div>
+        </div>
+</article>
+<?php else : ?>
+    <article>
+        <nav class="breadcrumb">
+            <a class="first" href="index.php?page=dashBoard">Retour Tableau de bord</a><span class="chevron">&gt;</span><a href="index.php?page=gallery">Retour gestion images</a><span class="chevron">&gt;</span><span class="current-page">Modification ou suppression d'image</span>
+        </nav>
+        <p class="align-center">Choisissez la catégorie</p>
+        <div class="actions">
+            <nav>
+                <ul>
+                    <?php foreach ($categorys as $category) : ?>
+                        <li class="action-button"><a href="index.php?page=updateImage&id=<?= htmlspecialchars($category['id_category']) ?>"><?= htmlspecialchars($category['category_name']) ?></a></li>
+                    <?php endforeach; ?>
+                </ul>
+            </nav>
+        </div>
+    </article>
+<?php endif; ?>

@@ -1,0 +1,92 @@
+<?php if (!isset($_SESSION["idAdmin"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<article>
+    <h1 class="center dashboard">Tableau de bord</h1>
+    <div class="center-block hello-user">
+        <span>Bienvenue <?= htmlspecialchars($_SESSION['firstname']) . ' ' . htmlspecialchars($_SESSION['lastname']) . ' - Employée N° ' . htmlspecialchars($_SESSION['employee']) ?></span>
+    </div>
+    <div class="statistics">
+        <h2>Statistiques de ventes du Click && Collect</h2>
+        <div class="sales statistic">
+            <span class="icon-sale">Ventes : <?= !empty($statistics['totalSales']) ? htmlspecialchars($statistics['totalSales']) : ' 0 ' ?> €</span>
+        </div>
+        <div class="number-orders statistic">
+            <span class="icon-order">Commandes valides : <?= !empty($statistics['numberOrders']) ? htmlspecialchars($statistics['numberOrders']) : ' 0 ' ?></span>
+        </div>
+        <div class="average-basket statistic">
+            <span class="icon-cart">Panier moyen : <?= htmlspecialchars($averageBasket) ?> €</span>
+        </div>
+        <div class="info">
+            <span>Les commandes Annulées ne rentrent pas dans les statistiques.</span>
+        </div>
+    </div>
+    <div class="bookings">
+        <h2>Réservation ateliers</h2>
+        <div class="row">
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Jour / Heure</th>
+                            <th>Participants</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($flowersWorkshop as $flowerWorkshop) : ?>
+                            <tr>
+                                <td><?= htmlspecialchars(date('d-m-y', strtotime($flowerWorkshop['work_date']))) . ' de ' . htmlspecialchars($flowerWorkshop['time_start']) . 'h à ' . htmlspecialchars($flowerWorkshop['time_end']) ?>h</td>
+                                <td><?= htmlspecialchars($flowerWorkshop['guests']) ?></td>
+                                <td><a class="btn-view" href="index.php?page=viewFlowerWorkshopDetails&idWork=<?= htmlspecialchars($flowerWorkshop['id_work']) ?>"><i class="fas fa-search"></i></a></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="block-messages-orders">
+        <div class="block-users">
+            <h2>Les 5 derniers messages</h2>
+            <div class="scroll">
+                <?php foreach ($this->_messaging->getMessagesDashboard() as $message) : ?>
+                    <p class="text-user">De <a href="index.php?page=messaging&idThread=<?= htmlspecialchars($message['id_thread_user']) ?>">
+                            <span class="user"><?= !empty($message['id_user'] != 0) ? htmlspecialchars($message['firstname']) . ' ' . htmlspecialchars($message['lastname']) : htmlspecialchars($message['email']) ?></span></a>
+                        <span class="date-message">le <?= htmlspecialchars(date('d-m-Y', strtotime($message['date_add']))) ?></span>
+                    </p>
+                        <p class="text-message"><?= htmlspecialchars($message['shop_message']) ?></p>
+                    <span class="tirets"></span>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <div class="block-orders">
+            <h2>Mes 5 dernières commandes</h2>
+            <div class="table-responsive table-home-dashboard">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nom du client</th>
+                            <th>Produits</th>
+                            <th>Montant</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($orders as $order) : ?>
+                            <tr>
+                                <td><?= htmlspecialchars($order['customer']) ?></td>
+                                <td><?= htmlspecialchars($order['numberProduct']) ?></td>
+                                <td><?= htmlspecialchars($order['total_amount']) ?> €</td>
+                                <td><?= htmlspecialchars(date('d-m-y', strtotime($order['date_add']))) ?></td>
+                                <td><a class="btn-view view-order" href="index.php?page=viewOrderDetails&idOrder=<?= htmlspecialchars($order['id_order']) ?>"><i class="fas fa-search"></i></a></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</article>

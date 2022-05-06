@@ -1,0 +1,68 @@
+<?php if(!isset($_SESSION["idAdmin"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<article>
+    <h2>Gestion de votre catalogue produits</h2>
+    <p>Cette espace vous permet de visualiser vos produits et d'accéder à la fiche du produit.</p>
+    <nav class="breadcrumb">
+        <a class="first" href="index.php?page=dashBoard">Retour Tableau de bord</a>
+    </nav>
+    <div class="actions">
+        <a class="action-button" href="index.php?page=createProduct" title="Créer un nouveau produit">Nouveau produit</a>
+    </div>
+    <?php if(array_key_exists('errors',$_SESSION)) : ?>
+        <div class="errors">
+            <?= '<ul>'.implode('<li>',$_SESSION['errors']).'</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <?php if(array_key_exists('success',$_SESSION)) : ?>
+        <div class="success">
+            <?= '<ul>'.implode('<li>',$_SESSION['success']).'</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <div class="row">
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>image</th>
+                        <th>Nom du produit</th>
+                        <th>Référence</th>
+                        <th>Categorie</th>
+                        <th>Prix HT</th>
+                        <th>Prix TTC</th>
+                        <th>Activé</th>
+                        <th colspan="2"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($listingProducts as $listProduct) : ?>
+                    <tr>
+                        <td><?= htmlspecialchars($listProduct['id_product']) ?></td>
+                        <td><img class="thumbnail-<?= htmlspecialchars($listProduct['orientation']) ?>" src="../../www/assets/img/product/miniature/<?= htmlspecialchars($listProduct['orientation']).'/'.htmlspecialchars($listProduct['name_miniature']) ?>" alt="<?= htmlspecialchars($listProduct['description_image']) ?>"/></td>                
+                        <td><?= htmlspecialchars($listProduct['name_product']) ?></td>
+                        <td><?= htmlspecialchars($listProduct['reference_product']) ?></td>
+                        <td><?= htmlspecialchars($listProduct['category_product']) ?></td>
+                        <td><?= htmlspecialchars(number_format($listProduct['price_product'],2)) ?> €</td>
+                        <td><?= htmlspecialchars($listProduct['price_tax_product']) ?> €</td>
+                        <td><?= htmlspecialchars($listProduct['active'] == 1) ? "oui"  : "non" ?></td>                
+                        <td><a class="btn-edit" href="index.php?page=editProduct&idProduct=<?= htmlspecialchars($listProduct['id_product']) ?>"><i class="fas fa-pencil-alt"></i></a></td>
+                        <td>
+                            <form action="index.php?page=deleteProduct" method="POST">
+                                <input type="hidden" name="idProduct" value="<?= htmlspecialchars($listProduct['id_product']) ?>"/>
+                                <button class="btn-delete" name="submit" type="submit"><i class="fas fa-trash-alt"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>    
+</article>
+<?php
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>   

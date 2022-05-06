@@ -1,0 +1,107 @@
+<?php if (!isset($_SESSION["idAdmin"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<article>
+    <h2>Vos horaires d'ouvertures</h2>
+    <p>Configurez les jours et horaires d'ouvertures de votre magasin.</p>
+    <nav class="breadcrumb">
+        <a class="first" href="index.php?page=dashBoard">Retour Tableau de bord</a><span class="chevron">&gt;</span><a href="index.php?page=configuration">Retour page configuration</a><span class="chevron">&gt;</span><span class="current-page">Mise à jour des horaires</span>
+    </nav>
+    <?php if (array_key_exists('errors', $_SESSION)) : ?>
+        <div class="errors">
+            <?= '<ul>' . implode('<li>', $_SESSION['errors']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <?php if (array_key_exists('success', $_SESSION)) : ?>
+        <div class="success"><?= '<ul>' . implode('<li>', $_SESSION['success']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <div class="row row-workhours">
+        <div class="table-responsive">
+            <div class="table table-thead-workhour">
+                <div class="thead workhour">
+                    <div class="th th-days">
+                        Jours
+                    </div>
+                    <div class="th th-start-day">
+                        1er jour
+                    </div>
+                    <div class="th th-open">
+                        Ouverture
+                    </div>
+                    <div class="th th-morning">
+                        Matin
+                    </div>
+                    <div class="th th-afternoon">
+                        Après-midi
+                    </div>
+                    <div class="th th-action">
+                        Action
+                    </div>
+                </div>
+            </div>
+            <?php foreach ($workingHours as $workingHour) : ?>
+                <form class="table" action="index.php?page=updateWorkHour" method="POST">
+                    <div class="tr">
+                        <div class="td span-days">
+                            <?= htmlspecialchars($workingHour['day']) ?>
+                            <input type="hidden" name="id" value="<?= htmlspecialchars($workingHour['id']) ?>">
+                        </div>
+                        <div class="td span-start-day">
+                            <div class="text-start-day display-mobile">
+                                1er jour de la semaine
+                            </div>
+                            <select name="startDay">
+                                <?= isset($workingHour['start_day']) && htmlspecialchars($workingHour['start_day'] == 1) ? '<option value="1">oui</option><option value="0">non</option>' : '<option value="0">non</option><option value="1">oui</option>' ?>
+                            </select>
+                        </div>
+                        <div class="td span-open">
+                            <div class="text-open display-mobile">
+                                Ouverture
+                            </div>
+                            <select name="active">
+                                <option value="0">non</option>
+                                <option value="1" selected>journée</option>
+                                <option value="2">matin</option>
+                                <option value="3">après-midi</option>
+                            </select>
+                        </div>
+                        <div class="td span-hours-morning">
+                            <div class="text-hours-morning-start display-mobile">
+                                Début le matin
+                            </div>
+                            <input type="time" name="hourMorningStart" value="<?= htmlspecialchars($workingHour['hour_morning_start']) ?>" step="300">
+                        </div>
+                        <div class="td span-hours-morning">
+                            <div class="text-hours-morning-end display-mobile">
+                                Fin le matin
+                            </div>
+                            <input type="time" name="hourMorningEnd" value="<?= htmlspecialchars($workingHour['hour_morning_end']) ?>" step="300">
+                        </div>
+                        <div class="td span-hours-afternoon">
+                            <div class="text-hours-afternoon-start display-mobile">
+                                Début l'après-midi
+                            </div>
+                            <input type="time" name="hourAfternoonStart" value="<?= htmlspecialchars($workingHour['hour_afternoon_start']) ?>" step="300">
+                        </div>
+                        <div class="td span-hours-afternoon">
+                            <div class="text-hours-afternoon-end display-mobile">
+                                Fin l'après-midi
+                            </div>
+                            <input type="time" name="hourAfternoonEnd" value="<?= htmlspecialchars($workingHour['hour_afternoon_end']) ?>" step="300">
+                        </div>
+                        <div class="td span-action">
+                            <button class="btn-save" type="submit" name="submit"><i class="fas fa-save"></i></button>
+                        </div>
+                    </div>
+                </form>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</article>
+<?php
+unset($_SESSION['formData']);
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>

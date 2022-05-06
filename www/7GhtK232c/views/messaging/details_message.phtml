@@ -1,0 +1,66 @@
+<?php if (!isset($_SESSION["idAdmin"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<article>
+    <h2>Détails d'un message</h2>
+    <p>Voici les détails de ce message.</p>
+    <nav class="breadcrumb">
+        <a class="first" href="index.php?page=dashBoard">Retour Tableau de bord</a><span class="chevron">&gt;</span><a href="index.php?page=messaging">Gestion de vos messages</a><span class="chevron">&gt;</span><span class="current-page">Détails d'un message</span>
+    </nav>
+    <?php if (array_key_exists('errors', $_SESSION)) : ?>
+        <div class="errors">
+            <?= '<ul>' . implode('<li>', $_SESSION['errors']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <?php if (array_key_exists('success', $_SESSION)) : ?>
+        <div class="success">
+            <?= '<ul>' . implode('<li>', $_SESSION['success']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <div class="row">
+        <span>Fil de discussion #<?= htmlspecialchars($thread) ?> de <?= !empty($idUser != 0) ? htmlspecialchars($nameUser) . ' (' . htmlspecialchars($email) . ')' : htmlspecialchars($email) ?></span>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Session</th>
+                        <th>Date</th>
+                        <th>Messages</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($detailsMessage as $messages) : ?>
+                        <tr>
+                            <td><?= !empty($messages['id_employee'] == 0) ? '<i class="fas fa-user"></i>' : '<i class="fas fa-store"></i>' ?></td>
+                            <td><?= htmlspecialchars($messages['date_add']) ?></td>
+                            <td><?= htmlspecialchars($messages['shop_message']) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <form action="index.php?page=answerMessage" method="POST">
+            <label>Votre réponse</label>
+            <?php if (isset($_SESSION['formData']['message'])) : ?>
+                <textarea name="message" id="message" rows="4" cols="40" required><?= htmlspecialchars($_SESSION['formData']['message']) ?></textarea>
+            <?php else : ?>
+                <textarea name="message" id="message" rows="10" cols="60" required></textarea>
+            <?php endif; ?>
+            <div class="btn-form">
+                <input type="hidden" name="thread" value="<?= htmlspecialchars($messages['id_thread_user']) ?>" />
+                <input type="hidden" name="employee" value="<?= htmlspecialchars($_SESSION['employee']) ?>" />
+                <button class="btn-form-submit" id="btn-form-submit" type="submit" name="submit">Envoyez</button>
+                <button class="btn-form-cancel" type="reset">Effacer</button>
+            </div>
+        </form>
+    </div>
+</article>
+<?php
+unset($_SESSION['formData']);
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>

@@ -1,0 +1,116 @@
+<?php if(!isset($_SESSION["idAdmin"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<article>      
+    <h2>Commande N° <?= htmlspecialchars($idOrder) ?> du <?= htmlspecialchars(date('d-m-y', strtotime($dateOrder))) ?></h2>
+    <p class=""></p>
+    <nav class="breadcrumb">
+        <a class="first" href="index.php?page=dashBoard">Retour Tableau de bord</a><span class="chevron">&gt;</span><a href="index.php?page=viewOrders">Retour à vos commandes</a><span class="chevron">&gt;</span><span class="current-page">Détails commande</span>
+    </nav>
+    <?php if(array_key_exists('errors', $_SESSION)) : ?>
+        <div class="errors">
+            <?= '<ul>'.implode('<li>',$_SESSION['errors']).'</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <?php if(array_key_exists('success', $_SESSION)) : ?>
+        <div class="success">
+            <?= '<ul>'.implode('<li>',$_SESSION['success']).'</ul>'; ?>
+    </div>
+    <?php endif; ?>    
+        <div class="user-info-address">
+            <h3>Adresse de Facturation</h3>
+            <address>
+                <p><?= htmlspecialchars($addressUser['lastname']).' '.htmlspecialchars($addressUser['firstname']) ?></p>
+                <p><?= htmlspecialchars($addressUser['company']) ?></p>
+                <p><?= htmlspecialchars($addressUser['addresse']) ?></p>
+                <p><?= htmlspecialchars($addressUser['address_comp']) ?></p>
+                <p><?= htmlspecialchars($addressUser['zip_code']).' '.htmlspecialchars($addressUser['city']) ?></p>
+                <p><?= htmlspecialchars($addressUser['country']) ?></p>
+                <p><?= htmlspecialchars($addressUser['phone']) ?></p>
+                <p><?= htmlspecialchars($addressUser['email']) ?></p>
+            </address>
+        </div>        
+        <div class="row order">
+        <form action="index.php?page=actionStatusOrder" method="POST">        
+            <div class="table-responsive">                
+                <table>
+                    <thead>
+                        <tr>
+                            <td>Etat</td>
+                            <td>Date</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($orderHistory as $detailsHistory) : ?>
+                        <tr>
+                            <input type="hidden" name="idOrder" value="<?= htmlspecialchars($detailsHistory['id_order']) ?>">                        
+                            <td><?= htmlspecialchars($detailsHistory['name_status']) ?></td>                        
+                            <td><?= htmlspecialchars($detailsHistory['date_add']) ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>                
+                </table>                           
+            </div>       
+        </div>        
+            <div class="row order">                
+                <div class="action-status">
+                    <label for="newStatus">Status de la commande :</label>
+                    <select name="newStatus" id="newStatus">
+                    <?php foreach($statusOrder as $status) : ?>                        
+                        <option value="<?= htmlspecialchars($status['id_status']) ?>"><?= htmlspecialchars($status['name_status']) ?></option>                        
+                    <?php endforeach; ?>                    
+                    </select>
+                    <input type="hidden" name="oldStatus" value="<?= htmlspecialchars($oldStatus) ?>">                    
+                    <button class="btn-form-submit" type="submit" name="submit">Mettre à jour la commande</button>                         
+                </div>
+            </div>        
+        </form>
+        <div class="row">
+            <div class="table-responsive">        
+            <table>
+                <thead>
+                    <tr>
+                        <td class="td-mobile-hidden">Image</td>
+                        <td>Désignation produit</td>
+                        <td>Quantité</td>
+                        <td>Prix unitaire</td>
+                        <td>Prix total</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($order as $detailsOrder) : ?>                    
+                        <tr>
+                            <td class="td-mobile-hidden">
+                                <?php if(!empty($detailsOrder['orientation'])) : ?>
+                            <img class="thumbnail-<?= htmlspecialchars($detailsOrder['orientation']) ?>" src="../../www/assets/img/product/miniature/<?= htmlspecialchars($detailsOrder['orientation']).'/'.htmlspecialchars($detailsOrder['name_miniature']) ?>" alt="<?= htmlspecialchars($detailsOrder['description_image']) ?>" title="<?= htmlspecialchars($detailsOrder['description_image']) ?>">
+                            </td>
+                            <?php else : ?>
+                               - 
+                            <?php endif; ?>                        
+                            <td>
+                                <?= htmlspecialchars($detailsOrder['history_name_product']) ?>
+                                <span class="product-reference">
+                                    <?= htmlspecialchars($detailsOrder['history_reference_product']) ?>
+                                </span>
+                            </td>                        
+                            <td><?= htmlspecialchars($detailsOrder['quantity']) ?></td>
+                            <td><?= htmlspecialchars($detailsOrder['unit_price_product']) ?> €</td>
+                            <td><?= htmlspecialchars(number_format($detailsOrder['quantity'] * $detailsOrder['unit_price_product'],2)) ?> €</td>
+                        </tr>                                  
+                    <?php endforeach; ?>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td class="total-amount-order" colspan="4">Total commande</td>
+                        <td><?= htmlspecialchars($detailsOrder['total_amount']) ?> €</td>
+                    </tr>                
+                </tfoot>
+            </table>
+            </div>
+        </div>
+</article> 
+<?php
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>

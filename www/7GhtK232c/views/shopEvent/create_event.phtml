@@ -1,0 +1,61 @@
+<?php if (!isset($_SESSION["idAdmin"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<article>
+    <h2>Creation d'un nouvelle évènement</h2>
+    <p>Créez votre nouvelle évènement en suivant les étapes ci-dessous.</p>
+    <nav class="breadcrumb">
+        <a class="first" href="index.php?page=dashBoard">Retour Tableau de bord</a><span class="chevron">&gt;</span><a href="index.php?page=configurationEvent">Gestion évènements</a><span class="chevron">&gt;</span><span class="current-page">Création d'un évènement</span>
+    </nav>
+    <?php if (array_key_exists('errors', $_SESSION)) : ?>
+        <div class="errors">
+            <?= '<ul>' . implode('<li>', $_SESSION['errors']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <?php if (array_key_exists('success', $_SESSION)) : ?>
+        <div class="success">
+            <?= '<ul>' . implode('<li>', $_SESSION['success']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <form action="index.php?page=createShopEvent" enctype="multipart/form-data" method="POST">
+        <fieldset>
+            <label class="required" for="activeEvent">Activer l'évènement</label>
+            <select name="activeEvent" id="activeEvent">
+                <option value="1">Oui</option>
+                <option value="0">Non</option>
+            </select>
+            <label class="required" for="titleEvent">Choisissez le titre de votre évènement</label>
+            <input type="text" name="titleEvent" id="titleEvent" value="<?= isset($_SESSION['formData']['titleEvent']) ? $_SESSION['formData']['titleEvent'] : '' ?>" required>
+            <label class="required" for="textEvent">Le contenu de votre évènement</label>
+            <textarea name="textEvent" id="textEvent" cols="80" rows="60" required>
+            <?= isset($_SESSION['formData']['textEvent']) ? $_SESSION['formData']['textEvent'] : '' ?>
+            </textarea>
+            <script>
+                CKEDITOR.replace('textEvent');
+            </script>
+            <div class="grp-btn">
+                <label class="required" for="eventDateStart">Date de démarrage</label>
+                <input type="date" name="eventDateStart" id="eventDateStart" value="<?= date('Y-m-d'); ?>" min="<?= date('Y-m-d'); ?>" required />
+            </div>
+            <div class="grp-btn">
+                <label class="required" for="eventDateEnd">Date de fin</label>
+                <input type="date" name="eventDateEnd" id="eventDateEnd" value="<?= date('Y-m-d'); ?>" min="<?= date('Y-m-d'); ?>" required />
+            </div>
+            <div class="grp-btn grp-btn-file">
+                <label class="required" for="image">Ajouter une image</label>
+                <input type="file" name="image" id="image" required />
+                <p class="legend-form-image">Format accepté (jpeg et jpg uniquement) - Poids max : 8Mo</p>
+            </div>
+        </fieldset>
+        <div class="btn-form">
+            <button class="btn-form-submit" id="btn-form-submit" type="submit" name="submit">Enregistrer</button>
+            <a class="btn-form-cancel" href="index.php?page=configurationEvent">Annuler</a>
+        </div>
+    </form>
+</article>
+<?php
+unset($_SESSION['formData']);
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>

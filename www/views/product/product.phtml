@@ -1,0 +1,36 @@
+<!-- Affichage page détails produit -->
+<article>
+    <div class="row-product">          
+        <div class="product-card">        
+            <div class="card-product">
+                <h3 class="product-name"><?= htmlspecialchars($product['name_product']) ?></h3>
+                <picture>
+                    <source media="(max-width: 410px)" srcset="www/assets/img/product/category/<?= htmlspecialchars($product['orientation']).'/'.htmlspecialchars($product['name_category']) ?>">
+                    <source media="(max-width: 2000px)" srcset="www/assets/img/product/large/<?= htmlspecialchars($product['orientation']).'/'.htmlspecialchars($product['name_large']) ?>">
+                    <img class="product-img-<?= htmlspecialchars($product['orientation']) ?>" src="www/assets/img/product/large/<?= htmlspecialchars($product['orientation']).'/'.htmlspecialchars($product['name_large']) ?>"
+                    alt="<?= htmlspecialchars($product['description_image']) ?>" title="<?= htmlspecialchars($product['description_image']) ?>">                    
+                </picture>                    
+                <ul>
+                    <li class="product-reference"><span>Référence : <?= htmlspecialchars($product['reference_product']) ?></span></li>
+                    <li>
+                        <div class="product-short-description">
+                            <?= strip_tags($product['short_description_product'],$tags) ?>
+                    </div>
+                    </li>                                           
+                </ul>
+                <span class="product-price"><?= htmlspecialchars($product['price_tax_product']) ?> €</span>
+                <div class="product-add-cart">
+                    <form action="index.php?page=createCart" method="POST">
+                        <input type="hidden" name="idProduct" value="<?= htmlspecialchars($product['id_product']) ?>">
+                        <input class="product-add-cart-input" type="number" name="addCartQty" id="addCartQty" value="1" min="1" step="1" size="4">
+                        <button class="btn-action" id="btnAddCart" name="submit" type="submit">Ajouter au panier</button>
+                    </form>
+                </div>
+                <div class="product-description">
+                    <h4>Information produit :</h4>
+                    <div><?= strip_tags($product['description_product'],$tags) ?></div>
+                </div> 
+            </div>       
+        </div>
+    </div>       
+</article>

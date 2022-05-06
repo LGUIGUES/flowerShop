@@ -1,0 +1,54 @@
+<?php if (!isset($_SESSION["idAdmin"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<article>
+    <h2>Ajout d'images dans vos galeries</h2>
+    <p>Ajoutez vos images dans les différentes galeries.</p>
+    <nav class="breadcrumb">
+        <a class="first" href="index.php?page=dashBoard">Retour Tableau de bord</a><span class="chevron">&gt;</span><a href="index.php?page=gallery">Retour gestion images</a><span class="chevron">&gt;</span><span class="current-page">Ajouter une image</span>
+    </nav>
+    <?php if (isset($_POST['message'])) : ?>
+        <div class="message"><?= htmlspecialchars($_POST['message']) ?></div>
+    <?php endif; ?>
+    <form action="index.php?page=addImage" enctype="multipart/form-data" method="POST">
+        <fieldset>
+            <div class="grp-btn">
+                <label class="required" for="category">Choisissez la catégorie pour l'image</label>
+                <select name="category" id="category">
+                    <?php if (isset($_POST['idCategory']) || (isset($_POST['categoryName']))) :  ?>
+                        <option value="<?= htmlspecialchars($_POST['idCategory']) ?>"><?= htmlspecialchars($_POST['categoryName']) ?></option>
+                    <?php else : ?>
+                        <?php foreach ($categorys as $category) : ?>
+                            <option value="<?= htmlspecialchars($category['id_category']) ?>"><?= htmlspecialchars($category['category_name']) ?></option>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </select>
+            </div>
+            <div class="grp-btn">
+                <label class="required" for="description">Description courte de l'image</label>
+                <?php if (isset($_POST['description'])) :   ?>
+                    <input type="text" name="description" id="description" value="<?= htmlspecialchars($_POST['description']) ?>" required />
+                <?php else : ?>
+                    <input type="text" name="description" id="description" required />
+                <?php endif; ?>
+            </div>
+            <div class="grp-btn">
+                <label class="required" for="orientation">Choisissez l'orientation de l'image</label>
+                <select name="orientation" id="orientation">
+                    <option value="portrait">Portrait</option>
+                    <option value="landscape">Paysage</option>
+                </select>
+            </div>
+            <div class="grp-btn">
+                <label class="required" for="image">Ajouter une image</label>
+                <input type="file" name="image" id="image" required>
+                <p class="legend-form-image">Format accepté (jpeg et jpg uniquement) - Poids max : 8Mo</p>
+            </div>
+        </fieldset>
+        <div class="btn-form">
+            <button class="btn-form-submit" id="btn-add-product" type="submit" name="submit">Enregistrer</button>
+            <a class="btn-form-cancel" href="index.php?page=gallery">Annuler</a>
+        </div>
+    </form>
+</article>

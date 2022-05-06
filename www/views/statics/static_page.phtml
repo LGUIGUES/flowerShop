@@ -1,0 +1,9 @@
+<!-- Affichage page statique -->
+<article>
+    <div class="row static">
+    <h2><?= htmlspecialchars($content['title_content']) ?></h2>
+        <div class="dynamic">
+            <?= strip_tags($content['text_content'],$tags) ?>
+        </div>   
+    </div>     
+</article>

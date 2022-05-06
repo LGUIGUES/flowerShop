@@ -1,0 +1,86 @@
+<?php if(!isset($_SESSION["idUser"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<!-- Affichage informations personnelles utilisateur -->
+<article>
+    <div class="row account-user">
+        <h2>Informations personnelles</h2>
+        <p>Vous pouvez modifier vos informations depuis cette espace.</p>
+        <nav class="breadcrumb">
+            <a class="first" href="index.php" title="Accueil">Accueil</a><span class="chevron">&gt;</span><a href="index.php?page=customer_account" title="Retour à votre espace personnel">Retour à votre espace personnel</a><span class="chevron">&gt;</span><span class="current-page">Informations personnelles</span>
+        </nav>
+        <?php if(array_key_exists('errors', $_SESSION)) : ?>
+        <div class="errors">
+            <?= '<ul>'.implode('<li>',$_SESSION['errors']).'</ul>'; ?>
+        </div>
+        <?php endif; ?>
+        <?php if(array_key_exists('success',$_SESSION)) : ?>
+            <div class="success"><?= '<ul>'.implode('<li>',$_SESSION['success']).'</ul>'; ?>
+        </div>
+        <?php endif; ?>
+        <form action="index.php?page=identity" method="POST">
+            <fieldset>        
+                <div class="grp-btn-radio">
+                <label class="required">Civilité</label>           
+                <label class="radio-inline">
+                    <span class="custom-radio">
+                        <input type="radio" name="gender" id="H" value="1" <?= isset($customer['id_gender']) && htmlspecialchars($customer['id_gender'] == 1) ? 'checked="checked"' : '' ?>/>
+                    </span>M 
+                </label>
+                <label class="radio-inline">
+                    <span class="custom-radio">
+                        <input type="radio" name="gender" id="F" value="2" <?= isset($customer['id_gender']) && htmlspecialchars($customer['id_gender'] == 2) ? 'checked="checked"' : '' ?>/>
+                    </span>Mme 
+                </label>                    
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="lastName">Nom</label>            
+                    <input type="text" name="lastName" id="lastName" value="<?= htmlspecialchars($customer['lastname']) ?>" required/>
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="firstName">Prénom</label>            
+                    <input type="text" name="firstName" id="firstName" value="<?= htmlspecialchars($customer['firstname']) ?>" required/>                           
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="email">E-mail</label>            
+                    <input type="email" name="email" id="email" value="<?= htmlspecialchars($customer['email']) ?>" required/>           
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="password">Mot de passe</label>
+                    <input class="password" type="password" name="password" id="password" placeholder="entre 8 et 20 caractères" pattern=".{8,20}" required/>
+                    <span class="view-pass" id="viewPassword"></span>                    
+                </div>                
+                <div class="grp-btn">
+                    <label class="optional" for="newPassword">Nouveau mot de passe</label>
+                    <input class="new-password" type="password" name="newPassword" id="newPassword" placeholder="entre 8 et 20 caractères" pattern=".{8,20}"/>
+                    <span class="view-pass" id="viewNewPassword"></span>
+                </div>
+                <div class="grp-btn">
+                    <label for="dateBirthday">Date de naissance</label>            
+                    <input type="date" name="dateBirthday" id="dateBirthday" value="<?= htmlspecialchars($customer['birthday']) ?>"/>            
+                </div>
+                <div class="legal-notice">            
+                    <input class="legal-gdpr" type="checkbox" name="legal" id="legal"/>
+                    <label class="required" for="legal">Accepter la politique de confidentialité (<a id="openModal" class="link-gdpr" href="#">Cliquez pour lire</a>)</label>
+                </div>
+            </fieldset>               
+                <div class="btn-form">
+                    <button class="btn-form-submit" id="btn-form-submit" type="submit" name="submit">Enregistrer</button>
+                    <a class="btn-form-cancel" href="index.php?page=customer_account" title="Annuler">Annuler</a>                               
+                </div>            
+        </form>
+    </div>    
+</article>
+<!-- Affichage modal politique de confidentialité -->
+<aside id="modal" class="legal-notice-off">
+<div class="legal-notice-container">
+    <span id="closeModal" class="close-modal">Fermer</span>
+    <div id="targetLegalNotice"></div>    
+</div>
+</aside>
+<?php
+unset($_SESSION['formData']);
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>

@@ -1,0 +1,117 @@
+<?php if(!isset($_SESSION["idUser"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<!-- Affichage page ajout d'adresse utilisateur -->
+<article>
+    <div class="row account-user">    
+        <h2>Ajouter une adresse</h2>
+        <p>Vous allez ajouter une nouvelle adresse à votre compte</p>
+        <nav class="breadcrumb">
+        <a class="first" href="index.php" title="Accueil">Accueil</a><span class="chevron">&gt;</span><a href="index.php?page=customer_account" title="Retour à votre espace personnel">Retour à votre espace personnel</a><span class="chevron">&gt;</span><a href="index.php?page=userAddress" title="Retour à vos adresses">Retour à vos adresses</a><span class="chevron">&gt;</span><span class="current-page">Ajouter une adresse</span>
+        </nav>  
+        <?php if(array_key_exists('errors', $_SESSION)) : ?>
+            <div class="errors">
+                <?= '<ul>'.implode('<li>',$_SESSION['errors']).'</ul>'; ?>
+            </div>
+        <?php endif; ?>
+        <?php if(array_key_exists('success', $_SESSION)) : ?>
+            <div class="success">
+                <?= '<ul>'.implode('<li>',$_SESSION['success']).'</ul>'; ?>
+        </div>
+        <?php endif; ?>
+        <form action="index.php?page=addUserAddress" method="POST">
+            <fieldset>
+                <div class="grp-btn">
+                    <label for="alias">Alias</label>
+                    <?php if(isset($_POST['alias'])) : ?>
+                    <input type="text" name="alias" id="alias" value="<?= htmlspecialchars($_SESSION['formData']['alias']) ?>"/>
+                    <?php else : ?>
+                        <input type="text" name="alias" id="alias" placeholder="Un alias"/>
+                    <?php endif; ?>    
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="lastName">Nom</label>
+                    <?php if(isset($_POST['lastName'])) : ?>
+                    <input type="text" name="lastName" id="lastName" value="<?= htmlspecialchars($_SESSION['formData']['lastName']) ?>" required/>
+                    <?php else : ?>
+                        <input type="text" name="lastName" id="lastName" placeholder="Un nom" required/>
+                    <?php endif; ?>    
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="firstName">Prénom</label>
+                    <?php if(isset($_POST['firstName'])) : ?>
+                    <input type="text" name="firstName" id="firstName" value="<?= htmlspecialchars($_SESSION['formData']['firstName']) ?>" required/>
+                    <?php else : ?>
+                        <input type="text" name="firstName" id="firstName" placeholder="Un prénom" required/>
+                    <?php endif; ?>                
+                </div>
+                <div class="grp-btn">
+                    <label for="company">Société</label>
+                    <?php if(isset($_POST['company'])) : ?>
+                    <input type="text" name="company" id="company" value="<?= htmlspecialchars($_SESSION['formData']['company']) ?>"/>
+                    <?php else : ?>
+                        <input type="text" name="company" id="company" placeholder="Nom de société"/>
+                    <?php endif; ?>
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="address">Adresse</label>
+                    <?php if(isset($_POST['address'])) : ?>
+                    <input type="text "name="address" id="address" value="<?= htmlspecialchars($_SESSION['formData']['address']) ?>" required/>
+                    <?php else : ?>
+                        <input type="text" name="address" id="address" placeholder="Une adresse" required/>    
+                    <?php endif; ?>    
+                </div>
+                <div class="grp-btn">
+                    <label for="addressComp">Adresse Complémentaire</label>
+                    <?php if(isset($_POST['addressComp'])) : ?>
+                    <input type="text "name="addressComp" id="addressComp" value="<?= htmlspecialchars($_SESSION['formData']['addressComp']) ?>"/>
+                    <?php else : ?>
+                        <input type="text" name="addressComp" id="addressComp" placeholder="Complément d'adresse"/>    
+                    <?php endif; ?>    
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="zipCode">Code Postal</label>
+                    <?php if(isset($_POST['zipCode'])) : ?>
+                    <input type="text" name="zipCode" id="zipCode" value="<?= htmlspecialchars($_SESSION['formData']['zipCode']) ?>" pattern="[0-9]{5}" required/>
+                    <?php else : ?>
+                        <input type="text" name="zipCode" id="zipCode" placeholder="Un code postal" pattern="[0-9]{5}" required/>
+                    <?php endif; ?>    
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="city">Ville</label>
+                    <?php if(isset($_POST['city'])) : ?>
+                    <input type="text" name="city" id="city" value="<?= htmlspecialchars($_SESSION['formData']['city']) ?>" required/>
+                    <?php else : ?>
+                        <input type="text" name="city" id="city" placeholder="Une ville" required/>
+                    <?php endif; ?>
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="country">Pays</label>
+                    <?php if(isset($_POST['country'])) : ?>
+                    <input type="text" name="country" id="country" value="<?= htmlspecialchars($_SESSION['formData']['country']) ?>" required/>
+                    <?php else : ?>
+                        <input type="text" name="country" id="country" placeholder="Un pays" required/>
+                    <?php endif; ?>
+                </div>                                
+                <div class="grp-btn">
+                    <label class="required" for="phone">Téléphone</label>
+                    <?php if(isset($_POST['phone'])) : ?>
+                    <input type="tel" name="phone" id="phone" value="<?= htmlspecialchars($_SESSION['formData']['phone']) ?>" pattern="0[1-68]([. ]?[0-9]{2}){4}" required/>
+                    <?php else : ?>
+                        <input type="text" name="phone" id="phone" placeholder="Un numéro de téléphone" pattern="0[1-68]([. ]?[0-9]{2}){4}" required/>
+                    <?php endif; ?>        
+                </div>
+            </fieldset>                
+            <div class="btn-form">
+                <button class="btn-form-submit" id="btn-form-submit" type="submit" name="submit">Enregistrer</button>
+                <button class="btn-form-cancel" type="reset">Effacer</button>                    
+            </div>            
+        </form>
+    </div>
+</article> 
+<?php
+unset($_SESSION['formData']);
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>

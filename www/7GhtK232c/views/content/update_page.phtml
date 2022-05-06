@@ -1,0 +1,66 @@
+<?php if(!isset($_SESSION["idAdmin"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<article>
+    <h2>Mise à jour d'une page de contenu</h2>
+    <p>Modifiez votre page en suivant les étapes ci-dessous. Si le champ est grisé, vous ne pouvez pas modifier l'information.</p>
+    <nav class="breadcrumb">
+    <a class="first" href="index.php?page=dashBoard">Retour Tableau de bord</a><span class="chevron">&gt;</span><a href="index.php?page=contentPages">Retour gestion des pages de contenu</a><span class="chevron">&gt;</span><span class="current-page">Mise à jour d'une page de contenu</span>
+    </nav>    
+    <?php if(array_key_exists('errors',$_SESSION)) : ?>
+        <div class="errors">
+            <?= '<ul>'.implode('<li>',$_SESSION['errors']).'</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <?php if(array_key_exists('success',$_SESSION)) : ?>
+        <div class="success">
+            <?= '<ul>'.implode('<li>',$_SESSION['success']).'</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <p>Choisissez le bloc dans lequels vous voulez mettre le lien.</p>
+    <form action="index.php?page=updatePage&idPage=<?= htmlspecialchars($page['id_page']) ?>&deletable=<?= htmlspecialchars($_GET['deletable']) ?>" method="POST">
+    <fieldset>
+        <label class="required" for="blockLinkPage">Choix du bloc</label>
+            <?php if(array_key_exists('deletable', $_GET) && $_GET['deletable'] == 0) : ?>
+                <input type="text" name="blockLinkPage" id="blockLinkPage" value="<?= htmlspecialchars($page['name_location']) ?>" size="30" disabled/> 
+                <input type="hidden" name="blockLinkPage" value="<?= htmlspecialchars($page['id_location']) ?>"/>
+            <?php else : ?>
+                <select name="blockLinkPage" id="blockLinkPage">
+                    <?php foreach($blocksLocation as $blockLocation) : ?>
+                    <option value="<?= htmlspecialchars($blockLocation['id_location']) ?>"><?= htmlspecialchars($blockLocation['name_location']) ?></option>               
+                    <?php endforeach; ?>
+                </select>
+            <?php endif; ?>
+            <label class="required" for="activePage">Activer la page</label>
+                <select name="activePage" id="activePage">
+                    <option value="1">Oui</option>
+                    <option value="0">Non</option>
+                </select>        
+            <label class="required" for="titlePage">Titre de la page</label>
+            <?php if(array_key_exists('deletable', $_GET) && $_GET['deletable'] == 0) : ?>            
+                <input type="text" name="<?= htmlspecialchars($page['title_content']) ?>" id="titleContent" value="<?= htmlspecialchars($page['title_content']) ?>" size="40" disabled/>
+                <input type="hidden" name="titleContent" value="<?= htmlspecialchars($page['title_content']) ?>"/>            
+            <?php else : ?>    
+                <input type="text" name="titleContent" id="titleContent" value="<?= htmlspecialchars($page['title_content']) ?>" size="40" required/>
+                <input type="hidden" name="deletable" value="1">
+            <?php endif; ?>            
+            <label for="textContent">Votre contenu</label>
+            <textarea name="textContent" id="textContent" cols="80" rows="60">
+            <?= htmlspecialchars($page['text_content']) ?>
+            </textarea>
+            <script>
+                CKEDITOR.replace( 'textContent' );
+            </script>
+    </fieldset>        
+        <div class="btn-form">
+            <button class="btn-form-submit" id="btn-form-submit" type="submit" name="submit">Enregistrer</button>
+            <button class="btn-form-cancel"><a href="index.php?page=contentPages">Annuler</a></button>
+        </div>    
+    </form>    
+</article>
+<?php
+unset($_SESSION['formData']);
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>

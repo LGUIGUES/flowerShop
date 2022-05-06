@@ -1,0 +1,205 @@
+<?php if (!isset($_SESSION["idAdmin"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<article>
+    <h2>Gestion des clients de votre boutique</h2>
+    <p>Cette espace vous permet de visualiser vos clients et d'accéder à des informations supplémentaires.</p>
+    <nav class="breadcrumb">
+        <a class="first" href="index.php?page=dashBoard">Retour Tableau de bord</a><span class="chevron">&gt;</span><a href="index.php?page=viewUsers">Retour gestion clients</a><span class="chevron">&gt;</span><span class="current-page">Fiche client</span>
+    </nav>
+    <?php if (array_key_exists('errors', $_SESSION)) : ?>
+        <div class="errors">
+            <?= '<ul>' . implode('<li>', $_SESSION['errors']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <?php if (array_key_exists('success', $_SESSION)) : ?>
+        <div class="success">
+            <?= '<ul>' . implode('<li>', $_SESSION['success']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <div class="row card-user">
+        <div class="user-title"><?= htmlspecialchars($user['firstname'] . ' ' . htmlspecialchars($user['lastname'])) ?></div>
+        <div class="table-responsive">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Civilité</td>
+                        <td><?= htmlspecialchars($user['gender_name']) ?></td>
+                    </tr>
+                    <tr>
+                        <td>Age</td>
+                        <td><?= !empty(htmlspecialchars($user['birthday'])) ? date_diff(date_create(htmlspecialchars($user['birthday'])), date_create(date('Y-m-d')))->format('%y') . ' ans - ' : '' ?>(Né le <?= date('d-m-Y', strtotime(htmlspecialchars($user['birthday']))) ?>)</td>
+                    </tr>
+                    <tr>
+                        <td>Inscription : </td>
+                        <td><?= date('d-m-Y H:i:s', strtotime(htmlspecialchars($user['date_add']))) ?></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row card-workshop">
+        <div class="title-user-workshop">Réservations Ateliers</div>
+        <div class="table-responsive flowers-works">
+            <table>
+                <thead>
+                    <tr>
+                        <th># Cours</th>
+                        <th>Jour</th>
+                        <th>Horaire du cours</th>
+                        <th>Confirmé</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (!empty($flowersWorkshopUser)) : ?>
+                        <?php foreach ($flowersWorkshopUser as $flowerWorkshopUser) : ?>
+                            <tr>
+                                <td><?= htmlspecialchars($flowerWorkshopUser['id_work']) ?></a></td>
+                                <td>
+                                    <a href="index.php?page=viewFlowerWorkshopDetails&idWork=<?= htmlspecialchars($flowerWorkshopUser['id_work']) ?>">
+                                        <?= htmlspecialchars($flowerWorkshopUser['name_shop_day']) . ' ' . htmlspecialchars(date('d-m', strtotime($flowerWorkshopUser['work_date']))) ?>
+                                </td>
+                                <td>
+                                    <?= htmlspecialchars($flowerWorkshopUser['time_start']) . 'h à ' . htmlspecialchars($flowerWorkshopUser['time_end']) . 'h' ?>
+                                </td>
+                                <td><?= !empty($flowerWorkshopUser['confirmed'] == 0) ? 'Non' : 'Oui' ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else : ?>
+                        <tr>
+                            <td colspan="3">Aucuns cours de réservés</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row card-message">
+        <div class="title-user-message">Messages</div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th># Fil</th>
+                        <th>Messages</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (!empty($messagesUser)) : ?>
+                        <?php foreach ($messagesUser as $message) : ?>
+                            <tr>
+                                <td><?= htmlspecialchars($message['id_thread_user']) ?></td>
+                                <td><a href="index.php?page=detailsMessage&idThread=<?= htmlspecialchars($message['id_thread_user']) ?>"><?= htmlspecialchars($message['messages']) ?></a></td>
+                                <td><?= htmlspecialchars(date('d-m-y H:i:s', strtotime($message['date_add']))) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else : ?>
+                        <tr>
+                            <td colspan="3">Aucuns messages</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row card-order">
+        <div class="title-user-order"><?= !empty($statUserOrders['numberOrders'] > 1) ? 'Commandes' : 'Commande' ?></div>
+        <span><?= htmlspecialchars($statUserOrders['numberOrders']) ?><?= !empty($statUserOrders['numberOrders'] > 1) ? ' Commandes' : ' Commande' ?> pour un montant total de <?= htmlspecialchars($statUserOrders['totalSales']) ?> €</span>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Date</th>
+                        <th>Paiment</th>
+                        <th>Etat</th>
+                        <th>Produits</th>
+                        <th>Total</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($orders as $order) : ?>
+                        <tr>
+                            <td><?= htmlspecialchars($order['id_order']) ?></td>
+                            <td><?= htmlspecialchars(date('d-m-Y', strtotime($order['date_add']))) ?></td>
+                            <td><?= htmlspecialchars($order['name_payment']) ?></td>
+                            <td><?= htmlspecialchars($order['name_status']) ?></td>
+                            <td><?= htmlspecialchars($order['numberProduct']) ?></td>
+                            <td><?= htmlspecialchars($order['total_amount']) ?> €</td>
+                            <td><a class="btn-view view-order" href="index.php?page=viewOrderDetails&idOrder=<?= htmlspecialchars($order['id_order']) ?>"><i class="fas fa-eye"></i></a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row card-buy-products">
+        <div class="title-user-buy-products"><?= !empty($statUserTotalProductsPurchased['numberProducts'] > 1) ? ' Produits achetés' : ' Produit acheté' ?></div>
+        <span>
+            <?= !empty($statUserTotalProductsPurchased['numberProducts'] > 0) ? htmlspecialchars($statUserTotalProductsPurchased['numberProducts']) : '0' ?>
+            <?= !empty($statUserTotalProductsPurchased['numberProducts'] > 1) ? ' Produits commandés' : ' Produit commandé' ?></span>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Nom du produit</th>
+                        <th>Quantité</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($productsPurchased as $product) : ?>
+                        <tr>
+                            <td><?= htmlspecialchars(date('d-m-Y', strtotime($product['date_add']))) ?></td>
+                            <td><?= htmlspecialchars($product['name_product']) ?></td>
+                            <td><?= htmlspecialchars($product['quantity']) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row card-addresse">
+        <div class="user-adresse-title">Adresses</div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Société</th>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Adresse</th>
+                        <th>Pays</th>
+                        <th>Téléphone</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (!empty($addresses)) : ?>
+                        <?php foreach ($addresses as $addresse) : ?>
+                            <tr>
+                                <td><?= htmlspecialchars($addresse['company']) ?></td>
+                                <td><?= htmlspecialchars($addresse['lastname']) ?></td>
+                                <td><?= htmlspecialchars($addresse['firstname']) ?></td>
+                                <td><?= htmlspecialchars($addresse['addresse']) . ' ' . htmlspecialchars($addresse['zip_code']) . ' ' . htmlspecialchars($addresse['city']) ?></td>
+                                <td><?= htmlspecialchars($addresse['country']) ?></td>
+                                <td><?= htmlspecialchars($addresse['phone']) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else : ?>
+                        <tr>
+                            <td colspan="6">Ce client ne possède aucunes adresses</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</article>
+<?php
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>

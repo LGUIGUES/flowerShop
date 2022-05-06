@@ -1,0 +1,114 @@
+<?php if (!isset($_SESSION["idAdmin"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<article>
+    <h2>Modification d'un produit</h2>
+    <p>Vous pouvez apporter les modifications à votre produit.</p>
+    <nav class="breadcrumb">
+        <a class="first" href="index.php?page=dashBoard">Retour Tableau de bord</a><span class="chevron">&gt;</span><a href="index.php?page=viewProducts">Retour au catalogue produits</a><span class="chevron">&gt;</span><span class="current-page">Modification d'un produit</span>
+    </nav>
+    <?php if (array_key_exists('errors', $_SESSION)) : ?>
+        <div class="errors">
+            <?= '<ul>' . implode('<li>', $_SESSION['errors']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <?php if (array_key_exists('success', $_SESSION)) : ?>
+        <div class="success">
+            <?= '<ul>' . implode('<li>', $_SESSION['success']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <form action="index.php?page=editProduct" enctype="multipart/form-data" method="POST">
+        <fieldset>
+            <div class="flex-form-add">
+                <div class="grp-btn">
+                    <input type="hidden" name="idProduct" value="<?= htmlspecialchars($product['id_product']) ?>" />
+                    <label class="required" for="categoryProduct">Choisissez une catégorie</label>
+                    <select name="categoryProduct" id="categoryProduct">
+                        <?php foreach ($categorys as $category) : ?>
+                            <option value="<?= htmlspecialchars($category['id_category']) ?>"><?= htmlspecialchars($category['category_name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="nameProduct">Nom du produit</label>
+                    <input type="text" name="nameProduct" id="nameProduct" value="<?= htmlspecialchars($product['name_product']) ?>" required />
+                </div>
+                <div class="grp-btn">
+                    <label for="nameProduct">Référence</label>
+                    <input type="text" name="referenceProduct" id="referenceProduct" value="<?= htmlspecialchars($product['reference_product']) ?>" />
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="shortDescriptionProduct">Description Courte</label>
+                    <textarea name="shortDescriptionProduct" id="shortDescriptionProduct" rows="4" cols="400" required>
+                    <?= htmlspecialchars($product['short_description_product']) ?>
+                    </textarea>
+                    <script>
+                        CKEDITOR.replace('shortDescriptionProduct');
+                    </script>
+                </div>
+                <div class="grp-btn">
+                    <label for="descriptionProduct">Description longue</label>
+                    <textarea name="descriptionProduct" id="descriptionProduct" rows="4" cols="400">
+                    <?= htmlspecialchars($product['description_product']) ?>
+                    </textarea>
+                    <script>
+                        CKEDITOR.replace('descriptionProduct');
+                    </script>
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="replaceImage">Souhaitez-vous remplacer l'image ?</label>
+                    <select name="replaceImage" id="replaceImage">
+                        <option value="0">non</option>
+                        <option value="1">oui</option>
+                    </select>
+                </div>
+                <div class="replace-image">
+                    <div class="grp-btn">
+                        <label class="required" for="orientation">Choisissez l'orientation de l'image</label>
+                        <select name="orientation" id="orientation">
+                            <option value="0">Portrait</option>
+                            <option value="1">Paysage</option>
+                        </select>
+                    </div>
+                    <div class="grp-btn">
+                        <label class="required" for="descriptionImage">Description image 40 caractères(max.)</label>
+                        <input type="text" name="descriptionImage" id="descriptionImage" value="<?= htmlspecialchars($product['description_image']) ?>" maxlength="40" size="40" required />
+                    </div>
+                    <div class="view-actualy-image">
+                        <p>Image actuel du produit</p>
+                        <img class="img-replace-<?= htmlspecialchars($product['orientation']) ?>" src="../../www/assets/img/product/category/<?= htmlspecialchars($product['orientation']) . '/' . htmlspecialchars($product['name_category']) ?>" alt="<?= htmlspecialchars($product['description_image']) ?>" />
+                    </div>
+                    <div class="grp-btn grp-btn-file">
+                        <label for="newImage">Choisissez votre nouvelle image</label>
+                        <input type="file" name="newImage" id="newImage" />
+                        <p class="legend-form-image">Format accepté (jpeg et jpg uniquement) - Poids max : 8Mo</p>
+                    </div>
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="priceTaxProduct">Prix TTC</label>
+                    <input type="number" name="priceTaxProduct" id="priceTaxProduct" step="0.01" value="<?= htmlspecialchars($product['price_tax_product']) ?>" required />
+                </div>
+                <div class="grp-btn">
+                    <div class="product-status <?= !empty($product['active']) == 1 ? "online" : "offline" ?>">
+                        <p>Produit actuellement <?= !empty($product['active']) == 1 ? "Activé" : "Désactivé" ?></p>
+                    </div>
+                    <label class="required" for="activeProduct">Activer/Désactiver ce produit</label>
+                    <select name="activeProduct" id="activeProduct">
+                        <option value="1">Activer</option>
+                        <option value="0">Désactiver</option>
+                    </select>
+                </div>
+            </div>
+        </fieldset>
+        <div class="btn-form">
+            <button class="btn-form-submit" id="btn-add-product" type="submit" name="submit">Enregistrer</button>
+            <a class="btn-form-cancel" href="index.php?page=viewProducts">Annuler</a>
+        </div>
+    </form>
+</article>
+<?php
+unset($_SESSION['formData']);
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>

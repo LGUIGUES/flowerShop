@@ -1,0 +1,99 @@
+<article>
+    <!-- container pour version desktop -->
+    <div class="position-desktop">
+        <!-- Affichage du Slider -->
+        <div class="home-slider">                        
+            <div id="slider" class="slider">                             
+                <img class="slide-1" src="www/assets/img/slider/interieur_1400.jpg" alt="Intérieur de la boutique">
+                <img class="slide-2" src="www/assets/img/slider/exterieur_1400.jpg" alt="Exterieur de la boutique">
+            </div>
+            <div id="arrowBack" class="left-arrow"></div>
+            <div id="arrowForward" class="right-arrow"></div>  
+        </div>
+        <!-- Affichage du bloc des horaires d'ouvertures -->
+        <div class="title-presentation">
+            <h2 class="customize-title-shop-workhours-intro txt-shadow reveal-1"><?= htmlspecialchars($homePageTeaserTitle['homepage_teaser_title']) ?></h2>
+            <h3 class="customize-title-shop-workhours txt-shadow reveal-2"><?= !empty($startDay) ? 'du '.htmlspecialchars($startDay).' au '.htmlspecialchars($endDay).' de' : '' ?></h3> 
+            <h3 class="customize-title-shop-workhours txt-shadow reveal-3"><?= htmlspecialchars($hours) ?></h3>
+            <h3 class="customize-title-shop-workhours txt-shadow reveal-4"><?= htmlspecialchars($dayWeek) ?> de <?= htmlspecialchars($hourWeek) ?></h3>
+        </div>
+        <!-- container services et bloc personnalisable -->
+        <div class="container-services-custom">
+            <!-- Affichage du bloc des services -->
+            <section class="block-services">
+                <h2>Nos Services</h2>
+                <ul>
+                    <?php foreach($shopServices as $service) : ?>
+                    <li class="custom-services"><a href="index.php?page=services" title="<?= htmlspecialchars($service['title_service']) ?>"><?= htmlspecialchars($service['title_service']) ?></a></li>
+                    <?php endforeach; ?>
+                </ul>
+            </section>
+            <!-- Affichage du bloc personnalisable -->
+            <section class="main-custom-block-home">
+                <h2 class="customize-title-text-shop-presentation txt-shadow"><?= htmlspecialchars($customizeText['title_content']) ?></h2>
+                <div class="customize-text-shop-presentation"><?= strip_tags(substr($customizeText['text_content'],0,295)."...",$tags) ?></div>
+                <a href="index.php?page=static&id=<?= htmlspecialchars($customizeText['id_page']) ?>" class="read-more" title="En savoir plus">En savoir plus</a>
+            </section>            
+        </div>
+        <!-- container carte map, réservation atelier et photos catégories -->                
+        <div class="container-map-lesson-gallery">
+            <div class="container-map-lesson">
+                <!-- Affichage de la carte google map dans une iframe -->
+                <div class="block-maps">
+                    <iframe sandbox="allow-scripts" class="maps" src="<?= htmlspecialchars($this ->_shopInformation['localization_map']) ?>" width="600" height="400" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                    <!-- Affichage du bloc réservation atelier floral -->
+                    <section class="block-form-lesson">
+                    <div class="lesson-information">
+                        <div class="lesson-title">
+                            <h2>Cours floral</h2>
+                        </div>
+                        <div class="lesson-work">
+                            <?php foreach($floralWorkshopInformations as $floralWorkshopInformation) : ?>   
+                            <p class="text-booking text-align-center">
+                            <span class="day"><?= htmlspecialchars($floralWorkshopInformation['name_shop_day']) ?></span>
+                            <span class="day hour">de</span>                                        
+                            <span class="hour"><?= htmlspecialchars($floralWorkshopInformation['time_start']).'h à '.htmlspecialchars($floralWorkshopInformation['time_end']).'h' ?></span>
+                            </p>
+                            <?php endforeach; ?>
+                        </div>
+                        <div class="action-lesson">
+                            <a href="index.php?<?= isset($_SESSION['idUser']) ? 'page=myBookingsFlowerWorkshop' : 'page=authentification' ?>" class="booking" title="<?= isset($_SESSION['idUser']) ? 'Mes ateliers' : 'Réservation' ?>"><?= isset($_SESSION['idUser']) ? 'Mes ateliers' : 'Réservation' ?></a>     
+                        </div>
+                    </div>
+                    <div class="hidden-mobile-image">
+                        <img class="lesson-image" src="www/assets/img/img_lesson.jpg" alt="Un cour floral chez FlowerShop">
+                    </div>
+                </section>                                    
+            </div>
+            <!-- Affichage des photos des catégories -->
+            <div class="container-blocks-gallery">                      
+                <div class="block-gallery">
+                    <?php foreach($imagesCategorys as $imageCategory) : ?>
+                    <a href="index.php?page=category&id=<?= htmlspecialchars($imageCategory['id_category']) ?>" title="<?= htmlspecialchars($imageCategory['title_category']) ?>"><img class="min-gallery" src="www/assets/img/category/<?= htmlspecialchars($imageCategory['name_img_category']) ?>" alt="<?= htmlspecialchars($imageCategory['title_category']) ?>"></a>                    
+                    <?php endforeach; ?>
+                </div>
+            </div> 
+        </div>
+        <!-- Affichage du bloc évènement -->                    
+        <?php if(isset($event['id_event'])) : ?>                    
+        <div class="event">            
+            <div class="event-img">
+                <img class="img-event" src="www/assets/img/event/large/<?= htmlspecialchars($event['img_event_large']) ?>" alt="<?= htmlspecialchars($event['title_shop_event']) ?>">
+                <div class="customize-event">
+                    <h2 class="title-event"><?= htmlspecialchars($event['title_shop_event']) ?></h2>
+                    <div class="description-event">
+                        <?= strip_tags($event['description_shop_event'],$tags) ?>
+                    </div>
+                    <div class="date-event">
+                        <h2>Du <?= htmlspecialchars(date('d-m-Y', strtotime($event['event_start']))) ?> au <?= htmlspecialchars(date('d-m-Y',strtotime($event['event_end']))) ?></h2>
+                    </div>
+                    <div class="link-events">
+                        <a href="index.php?page=shopEvents" title="Retrouvez tous nos évènements">Voir tous nos évènements</a>
+                    </div>
+                </div>
+            </div>
+        </div>        
+        <?php endif; ?>
+    </div>
+</article>

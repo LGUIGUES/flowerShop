@@ -1,0 +1,97 @@
+<?php if (!isset($_SESSION["idAdmin"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<article>
+    <h2>Création d'un produit</h2>
+    <p>Créez votre produit en suivant les étapes ci-dessous.</p>
+    <nav class="breadcrumb">
+        <a class="first" href="index.php?page=dashBoard">Retour Tableau de bord</a><span class="chevron">&gt;</span><a href="index.php?page=viewProducts">Catalogue produits</a><span class="chevron">&gt;</span><span class="current-page">Création d'un produit</span>
+    </nav>
+    <?php if (array_key_exists('errors', $_SESSION)) : ?>
+        <div class="errors">
+            <?= '<ul>' . implode('<li>', $_SESSION['errors']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <?php if (array_key_exists('success', $_SESSION)) : ?>
+        <div class="success">
+            <?= '<ul>' . implode('<li>', $_SESSION['success']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <form action="index.php?page=createProduct" enctype="multipart/form-data" method="POST">
+        <fieldset>
+            <div class="flex-form-add">
+                <div class="grp-btn">
+                    <label class="required" for="categoryProduct">Choisissez une catégorie</label>
+                    <select name="categoryProduct" id="categoryProduct">
+                        <?php foreach ($categorys as $category) : ?>
+                            <option value="<?= htmlspecialchars($category['id_category']) ?>"><?= htmlspecialchars($category['category_name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="nameProduct">Nom du produit</label>
+                    <input type="text" name="nameProduct" id="nameProduct" value="<?= isset($_SESSION['formData']['nameProduct']) ? htmlspecialchars($_SESSION['formData']['nameProduct']) : "" ?>" required />
+                </div>
+                <div class="grp-btn">
+                    <label for="nameProduct">Référence</label>
+                    <input type="text" name="referenceProduct" id="referenceProduct" value="<?= isset($_SESSION['formData']['referenceProduct']) ? htmlspecialchars($_SESSION['formData']['referenceProduct']) : "" ?>" />
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="shortDescriptionProduct">Description Courte</label>
+                    <textarea name="shortDescriptionProduct" id="shortDescriptionProduct" rows="4" cols="400" required>
+                    <?= isset($_SESSION['formData']['shortDescriptionProduct']) ? htmlspecialchars($_SESSION['formData']['shortDescriptionProduct']) : "" ?>
+                    </textarea>
+                    <script>
+                        CKEDITOR.replace('shortDescriptionProduct');
+                    </script>
+                </div>
+                <div class="grp-btn">
+                    <label for="descriptionProduct">Description longue</label>
+                    <textarea name="descriptionProduct" id="descriptionProduct" rows="4" cols="400">
+                    <?= isset($_SESSION['formData']['descriptionProduct']) ? htmlspecialchars($_SESSION['formData']['descriptionProduct']) : "" ?>
+                    </textarea>
+                    <script>
+                        CKEDITOR.replace('descriptionProduct');
+                    </script>
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="orientation">Choisissez l'orientation de l'image</label>
+                    <select name="orientation" id="orientation">
+                        <option value="0">Portrait</option>
+                        <option value="1">Paysage</option>
+                    </select>
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="descriptionImage">Description image 40 caractères(max.)</label>
+                    <input type="text" name="descriptionImage" id="descriptionImage" value="<?= isset($_SESSION['formData']['descriptionImage']) ? htmlspecialchars($_SESSION['formData']['descriptionImage']) : "" ?>" maxlength="40" size="40" required />
+                </div>
+                <div class="grp-btn grp-btn-file">
+                    <label class="required" for="image">Ajouter une image</label>
+                    <input type="file" name="image" id="image" required />
+                    <p class="legend-form-image">Format accepté (jpeg et jpg uniquement) - Poids max : 8Mo</p>
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="priceTaxProduct">Prix TTC: </label>
+                    <input type="number" name="priceTaxProduct" id="priceTaxProduct" step="0.01" value="<?= isset($_SESSION['formData']['priceTaxProduct']) ? htmlspecialchars($_SESSION['formData']['priceTaxProduct']) : "" ?>" required />
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="activeProduct">Activer/Désactiver le produit</label>
+                    <select name="activeProduct" id="activeProduct">
+                        <option value="1">Activer</option>
+                        <option value="0">Désactiver</option>
+                    </select>
+                </div>
+            </div>
+        </fieldset>
+        <div class="btn-form">
+            <button class="btn-form-submit" id="btn-create-product" type="submit" name="submit">Enregistrer</button>
+            <a class="btn-form-cancel" href="index.php?page=viewProducts">Annuler</a>
+        </div>
+    </form>
+</article>
+<?php
+unset($_SESSION['formData']);
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>

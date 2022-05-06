@@ -1,0 +1,73 @@
+<!-- Affichage panier -->
+<article>
+    <div class="row-cart">
+        <div class="list-cart">
+            <div class="card-cart">
+                <div class="cart-title">
+                    <h3>Votre panier</h3>
+                    <span><?= !empty($_SESSION['basket']) ? '' : 'est vide...' ?></span>
+                </div>
+                <?php if (array_key_exists('errors', $_SESSION)) : ?>
+                    <div class="errors">
+                        <?= '<ul>' . implode('<li>', $_SESSION['errors']) . '</ul>'; ?>
+                    </div>
+                <?php endif; ?>
+                <?php if (array_key_exists('success', $_SESSION)) : ?>
+                    <div class="success">
+                        <?= '<ul>' . implode('<li>', $_SESSION['success']) . '</ul>'; ?>
+                    </div>
+                <?php endif; ?>
+                <ul>
+                    <?php foreach ($cartProducts as $product) : ?>
+                        <li>
+                            <div class="cart-details">
+                                <div class="cart-product-img">
+                                    <a href="index.php?page=viewProduct&id=<?= htmlspecialchars($product['id_product']) ?>" title="<?= htmlspecialchars($product['name_product']) ?>">
+                                        <img class="cart-product-img-miniature-<?= htmlspecialchars($product['orientation']) ?>" src="www/assets/img/product/miniature/<?= htmlspecialchars($product['orientation']) . '/' . htmlspecialchars($product['name_miniature']) ?>" alt="<?= htmlspecialchars($product['description_image']) ?>">
+                                    </a>
+                                </div>
+                                <div class="cart-product-name">
+                                    <a href="index.php?page=viewProduct&id=<?= htmlspecialchars($product['id_product']) ?>" title="<?= htmlspecialchars($product['name_product']) ?>">
+                                        <h4><?= htmlspecialchars($product['name_product']) ?></h4>
+                                    </a>
+                                    <div class="product-unit-price">
+                                        <span><?= htmlspecialchars($product['price_tax_product']) ?> €</span>
+                                    </div>
+                                </div>
+                                <div class="cart-product-qty">
+                                    <span>Quantité : <?= $_SESSION['basket'][htmlspecialchars($product['id_product'])] ?></span>
+                                </div>
+                                <div class="cart-product-total-row">
+                                    <span>Total produit : <?= $_SESSION['basket'][htmlspecialchars($product['id_product'])] * htmlspecialchars($product['price_tax_product']) ?> €</span>
+                                </div>
+                                <div class="cart-action-row">
+                                    <form action="index.php?page=delCartProduct" method="POST">
+                                        <input type="hidden" name="idProduct" value="<?= htmlspecialchars($product['id_product']) ?>">
+                                        <button class="btn-delete" name="submit" type="submit">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+                <?php if (!empty($_SESSION['basket'])) : ?>
+                    <div class="cart-product-total-qty">
+                        <span><?= $this->cartProductQty() ?><?= $this->cartProductQty() > 1 ? " produits" : " produit" ?></span>
+                    </div>
+                    <div class="cart-product-total-cart">
+                        <span>Total panier : <?= $this->totalCart() ?> €</span>
+                    </div>
+                    <div class="cart-action-order">
+                        <a class="btn-action" href="index.php?page=cartAddressOrder" title="Commander">Commander</a>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</article>
+<?php
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>

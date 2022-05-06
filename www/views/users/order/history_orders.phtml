@@ -1,0 +1,56 @@
+<?php if(!isset($_SESSION["idUser"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<!-- Affichage historique des commandes utilisateur -->
+<article>
+    <div class="row account-user">    
+        <h2>Historique de vos commandes</h2>
+        <p>Consultez le détails de vos commandes passées depuis la création de votre compte.</p>
+        <nav class="breadcrumb">
+            <a class="first" href="index.php" title="Accueil">Accueil</a><span class="chevron">&gt;</span><a href="index.php?page=customer_account" title="Retour à votre espace personnel">Retour à votre espace personnel</a><span class="chevron">&gt;</span><span class="current-page">Vos commandes</span>
+        </nav>
+        <?php if(array_key_exists('errors', $_SESSION)) : ?>
+            <div class="errors">
+                <?= '<ul>'.implode('<li>',$_SESSION['errors']).'</ul>'; ?>
+            </div>
+        <?php endif; ?>
+        <?php if(array_key_exists('success', $_SESSION)) : ?>
+            <div class="success">
+                <?= '<ul>'.implode('<li>',$_SESSION['success']).'</ul>'; ?>
+        </div>
+        <?php endif; ?>
+        <div class="row">
+            <div class="table-responsive history-orders">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>N°</th>
+                            <th>Date</th>
+                            <th>Montant total</th>
+                            <th>Paiement</th>
+                            <th>Etat</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>                        
+                        <?php foreach($orders as $order) : ?>                            
+                            <tr>                        
+                                <td><?= htmlspecialchars($order['id_order']) ?></td>                                
+                                <td><?= htmlspecialchars(date('d-m-y', strtotime($order['date_add']))) ?></td>
+                                <td><?= htmlspecialchars($order['total_amount']) ?> €</td>
+                                <td><?= htmlspecialchars($order['name_payment']) ?></td>
+                                <td><?= htmlspecialchars($order['name_status']) ?></td>                                
+                                <td><a class="btn-view view-order" href="index.php?page=viewOrderDetails&idOrder=<?= htmlspecialchars($order['id_order']) ?>" title="Voir les détails de la commande"><i class="fas fa-eye"></i></a></td>
+                            </tr>                                        
+                        <?php endforeach; ?>                       
+                    </tbody>
+                </table>
+            </div>            
+        </div>
+    </div>
+</article> 
+<?php
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>

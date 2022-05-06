@@ -1,0 +1,45 @@
+<?php if (!isset($_SESSION["idAdmin"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<article>
+    <h2>Gestion de vos images dans les galeries</h2>
+    <p>Vous pouvez ajouter, modifier ou supprimer des images. Choisissez une catégorie pour faire vos modifications.</p>
+    <nav class="breadcrumb">
+        <a class="first" href="index.php?page=dashBoard">Retour Tableau de bord</a>
+    </nav>
+    <?php if (isset($_POST['message'])) : ?>
+        <div class="message"><?= htmlspecialchars($_POST['message']) ?></div>
+    <?php endif; ?>
+    <div class="actions">
+        <a class="action-button" href="index.php?page=addImage" title="Ajoutez une image">Ajouter une image</a>
+        <a class="action-button" href="index.php?page=updateImage" title="Modifier une image">Modifier ou supprimer une image</a>
+    </div>
+    <div class="row">
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <td colspan="4">Informations sur les images de vos catégories</td>
+                    </tr>
+                    <tr>
+                        <th>Nom de la catégorie</th>
+                        <th>Nombre d'images</th>
+                        <th>Nombre de descriptions</th>
+                        <th>Nombre de miniatures</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($infoImages as $infoImage) : ?>
+                        <tr>
+                            <td><?= htmlspecialchars($infoImage['category_name']) ?></td>
+                            <td><?= htmlspecialchars($infoImage['nbrImg']) ?></td>
+                            <td><?= htmlspecialchars($infoImage['nbrDesc']) ?></td>
+                            <td><?= htmlspecialchars($infoImage['nbrMin']) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</article>

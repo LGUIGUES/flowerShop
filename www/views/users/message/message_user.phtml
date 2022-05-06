@@ -1,0 +1,36 @@
+<?php if(!isset($_SESSION["idUser"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<!-- Affichage liste des messages utilisateur -->
+<article>
+    <div class="row account-user">
+        <h2>Mes messages</h2>
+        <p>Cette espace vous permet de consulter les messages envoyés au commerçant de la boutique.</p>
+        <nav class="breadcrumb">
+        <a class="first" href="index.php" title="Accueil">Accueil</a><span class="chevron">&gt;</span><a href="index.php?page=customer_account" title="Retour à votre espace personnel">Retour à votre espace personnel</a><span class="chevron">&gt;</span><span class="current-page">Mes messages</span>
+        </nav>        
+        <div class="row">
+            <div class="table-responsive messages">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Message</th>                            
+                            <th>Voir détails</th>
+                        </tr>
+                    </thead>
+                <tbody>
+                    <?php foreach($messagesUser as $messageUser) : ?>
+                    <tr>                    
+                        <td><?= htmlspecialchars($messageUser['date_add']) ?></td>
+                        <td><?= htmlspecialchars($messageUser['messages']) ?></td>                        
+                        <td><a href="index.php?page=detailsMessageUser&idThread=<?= htmlspecialchars($messageUser['id_thread_user']) ?>" title="Voir le message"><i class="far fa-eye"></i></a></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>            
+            </table>
+            </div>
+        </div>        
+    </div>
+</article>

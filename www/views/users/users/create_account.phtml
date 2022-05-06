@@ -1,0 +1,99 @@
+<?php if(isset($_SESSION['idUser'])) 
+    header('location:index.php?page=customer_account')
+?>
+<!-- Affichage page de création de compte utilisateur -->
+<article>
+    <div class="row authentification">       
+    <h2>Création de votre compte</h2>
+    <p>Vous allez créer votre espace personnalisé.</p>
+    <?php if(array_key_exists('errors', $_SESSION)) : ?>
+    <div class="errors">
+        <?= '<ul>'.implode('<li>',$_SESSION['errors']).'</ul>'; ?>
+    </div>
+    <?php endif; ?>
+    <?php if(isset($_SESSION['success'])) : ?>
+    <div class="success"><?= htmlspecialchars($_SESSION['success']) ?></div>
+    <?php endif; ?>
+    <div class="already-account">
+        <a class="text-align-center" href="index.php?page=authentification" title="Vous avez déjà un compte ? Connectez-vous ici">Vous avez déjà un compte ? Connectez-vous ici</a>
+    </div>       
+        <form action="index.php?page=create_account" method="POST">
+            <div class="flex-form">
+                <fieldset>
+                <div class="grp-btn-radio">
+                    <label class="required">Civilité</label>
+                    <label class="radio-inline">
+                        <span class="custom-radio">
+                            <input type="radio" name="gender" id="H" value="1"/>
+                        </span>M
+                    </label>                    
+                    <label class="radio-inline">
+                        <span class="custom-radio">
+                            <input type="radio" name="gender" id="F" value="2"/>
+                        </span>Mme
+                    </label>
+                </div>
+                    <div class="grp-btn">
+                    <label class="required" for="lastName">Nom</label>
+                    <?php if(isset($_SESSION['formData']['lastName'])) : ?>
+                    <input type="text" name="lastName" id="lastName" value="<?= htmlspecialchars($_SESSION['formData']['lastName']) ?>" required/>
+                    <?php else : ?>
+                        <input type="text" name="lastName" id="lastName" placeholder="Votre nom" required/>
+                    <?php endif; ?>    
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="firstName">Prénom</label>
+                    <?php if(isset($_SESSION['formData']['firstName'])) : ?>
+                    <input type="text" name="firstName" id="firstName" value="<?= htmlspecialchars($_SESSION['formData']['firstName']) ?>" required/>
+                    <?php else : ?>
+                        <input type="text" name="firstName" id="firstName" placeholder="Votre prénom" required/>
+                    <?php endif; ?>                
+                </div>
+                <div class="grp-btn">
+                    <label for="dateBirthday">Date de naissance</label>
+                    <?php if(isset($_SESSION['formData']['dateBirthday'])) : ?>
+                    <input type="date" name="dateBirthday" id="dateBirthday" value="<?= htmlspecialchars($_SESSION['formData']['dateBirthday']) ?>"/>
+                    <?php else : ?>
+                        <input type="date" name="dateBirthday" id="dateBirthday"/>
+                    <?php endif; ?>
+                </div>                
+                </fieldset>
+                <fieldset>
+                    <div class="grp-btn">
+                    <label class="required" for="email">E-mail</label>
+                    <?php if(isset($_SESSION['formData']['email'])) : ?>
+                    <input type="email" name="email" id="email" value="<?= htmlspecialchars($_SESSION['formData']['email']) ?>" required/>
+                    <?php else : ?>
+                        <input type="email" name="email" id="email" placeholder="votre@email.fr" required/>
+                    <?php endif; ?>     
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="password">Mot de passe</label>
+                    <input class="password" type="password" name="password" id="password" placeholder="entre 8 et 20 caractères" pattern=".{8,20}" required/>
+                    <span class="view-pass" id="viewPassword"></span>
+                </div>
+                <div class="legal-notice">            
+                    <input class="legal-gdpr" type="checkbox" name="legal" id="legal"/>
+                    <label class="required" for="legal">Accepter la politique de confidentialité (<a id="openModal" class="link-gdpr" href="#">Cliquez pour lire</a>)</label>
+                </div>
+                </fieldset>
+                <div class="btn-form">
+                    <button class="btn-form-submit" id="btn-form-submit" type="submit" name="submit">Créez Votre compte</button>
+                    <button class="btn-form-cancel" type="reset">Effacer</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</article>
+<!-- Affichage modal politique de confidentialité -->
+<aside id="modal" class="legal-notice-off">
+<div class="legal-notice-container">
+    <span id="closeModal" class="close-modal">Fermer</span>
+    <div id="targetLegalNotice"></div>    
+</div>
+</aside>
+<?php
+unset($_SESSION['formData']);
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>

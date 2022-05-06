@@ -1,0 +1,39 @@
+<?php if(!isset($_SESSION["idUser"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<!-- Affichage page d'accueil du compte utilisateur -->
+<article>
+    <div class="row account-user">
+    <h2>Bienvenue dans votre espace personnalisé</h2>
+    <nav class="breadcrumb">
+            <a class="first" href="index.php" title="Accueil">Accueil</a>
+        </nav>
+    <div>
+        <?php if(array_key_exists('errors',$_SESSION)) : ?>
+            <div class="errors">
+                <?= '<ul>'.implode('<li>',$_SESSION['errors']).'</ul>'; ?>
+            </div>
+        <?php endif; ?>
+        <?php if(array_key_exists('success',$_SESSION)) : ?>
+            <div class="success">
+                <?= '<ul>'.implode('<li>',$_SESSION['success']).'</ul>'; ?>
+            </div>
+        <?php endif; ?>        
+            <nav class="mobile">
+                <ul class="account-user">
+                    <li class="icon user-infos"><a href="index.php?page=identity" title="Mes informations">Mes Informations</a></li>
+                    <li class="icon user-address"><a href="index.php?page=userAddress" title="Mes adresses">Mes adresses</a></li>
+                    <li class="icon user-orders"><a href="index.php?page=myOrders" title="Mes commandes">Mes commandes</a></li>
+                    <li class="icon user-bookings"><a href="index.php?page=myBookingsFlowerWorkshop" title="Mes ateliers">Mes ateliers</a></li>
+                    <li class="icon user-messages"><a href="index.php?page=myMessages" title="Mes messages">Mes messages</a></li>            
+                    <li class="icon user-disconnection"><a href="index.php?page=disconnection" title="Déconnexion">Déconnexion</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</article>
+<?php
+unset($_SESSION['errors']);
+unset($_SESSION['success']); 
+?>

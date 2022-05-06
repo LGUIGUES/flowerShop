@@ -1,0 +1,59 @@
+<!-- Affichage formulaire de contact -->
+<article>
+    <div class="row form">
+    <h2>Formulaire de contact</h2>
+    <?php if(array_key_exists('errors',$_SESSION)) : ?>
+    <div class="errors">
+        <?= '<ul>'.implode('<li>',$_SESSION['errors']).'</ul>'; ?>
+    </div>
+    <?php endif; ?>
+    <?php if(array_key_exists('success',$_SESSION)) : ?>
+        <div class="success">
+            <?= '<ul>'.implode('<li>',$_SESSION['success']).'</ul>'; ?>
+        </div>
+    <?php endif; ?>
+        <!-- Si utilisateur connecté -->
+        <form action="index.php?page=contact" method="POST">       
+            <fieldset>
+                <?php if(isset($_SESSION['idUser'])) : ?> 
+                    <input type="hidden" name="idUser" value="<?= $_SESSION['idUser'] ?>"/>
+                <div class="grp-btn">
+                    <label class="required" for="message">message</label>
+                    <?php if(isset($_SESSION['formData']['message'])) : ?>
+                    <textarea name="message" id="message" rows="4" cols="40" required><?= htmlspecialchars($_SESSION['formData']['message']) ?></textarea>
+                    <?php else : ?>
+                        <textarea name="message" id="message" rows="4" cols="40" required></textarea>    
+                    <?php endif; ?>    
+                </div>        
+                <?php else : ?>
+                <!-- Si utilisateur non connecté -->            
+                <div class="grp-btn">            
+                    <label class="required" for="email">E-mail</label>             
+                    <?php if(isset($_SESSION['formData']['email'])) : ?>
+                    <input type="email" name="email" id="email" value="<?= htmlspecialchars($_SESSION['formData']['email']) ?>" required/>
+                    <?php else : ?>
+                        <input type="email" name="email" id="email" placeholder="votre@email.fr" required/>
+                    <?php endif; ?>             
+                </div>
+                <div class="grp-btn">
+                    <label class="required">message</label>
+                    <?php if(isset($_SESSION['formData']['message'])) : ?>
+                    <textarea name="message" id="message" rows="4" cols="40" required><?= htmlspecialchars($_SESSION['formData']['message']) ?></textarea>
+                    <?php else : ?>
+                        <textarea name="message" id="message" rows="4" cols="40" required></textarea>    
+                    <?php endif; ?>    
+                </div>
+                <?php endif; ?>        
+            </fieldset>
+                <div class="btn-form">
+                <button class="btn-form-submit" id="btn-form-submit" type="submit" name="submit">Envoyez</button>
+                <button class="btn-form-cancel" type="reset">Effacer</button>
+            </div>
+        </form>         
+    </div>        
+</article>
+<?php
+unset($_SESSION['formData']);
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>    

@@ -1,0 +1,214 @@
+<!-- Données pour l'entête HTML -->
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Description du site -->
+    <meta name="description" content="<?= !empty($metadescription) ? htmlspecialchars($metadescription) : 'Le fleuriste FlowerShop vous accueille dans son nouvel espace. Vous pourrez trouver un large choix de fleurs (traditionnelles et exotiques),des plantes, vertes et fleuries, d\'intérieur ou d\'extérieur, des vases, des cadeaux et de la décoration originale...' ?>">
+    <!-- Affichage favicon -->
+    <link rel="shortcut icon" href="www/assets/img/favicon/logo_ico.jpg" type="image/x-icon">
+    <!-- Fonts Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Signika&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Feuilles de styles -->
+    <link rel="stylesheet" type="text/css" href="www/assets/css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="www/assets/css/theme.css">
+    <!-- Titre de la page -->
+    <title><?= !empty($title) ? htmlspecialchars($title) : 'FlowerShop - Votre Fleuriste' ?></title>
+</head>
+
+<body class="scroll">
+    <div class="container">
+        <!-- Affichage du header -->
+        <header>
+            <div class="logo"><a class="logo" href="index.php"><img src="www/assets/img/svg/logo/logo.svg" alt="Logo du fleuriste FlowerShop" title="Votre fleuriste FlowerShop"></a>
+                <h1>Votre fleuriste</h1>
+                <p class="display-desktop-product">Cadeaux, Décoration, Vases</p>
+            </div>
+            <!-- Connexion utilisateur -->
+            <nav>
+                <span id="userMenuClosed" class="icon-account-user">
+                    <img src="www/assets/img/svg/icons/<?= !isset($_SESSION['idUser']) ? 'account_offline.svg' : 'account_online.svg' ?>" alt="Connexion espace client" title="<?= !isset($_SESSION['idUser']) ? 'Connectez-vous' : 'Mon compte' ?>">
+                </span>
+                <!-- Affichage menu utilisateur -->
+                <div class="user-menu">
+                    <span id="userCloseMenu" class="user-close-menu">Mon Compte</span>
+                    <ul class="menu-user">
+                        <?php if (!isset($_SESSION['idUser'])) : ?>
+                            <li><a href="index.php?page=authentification" title="Connexion">Connexion</a></li>
+                        <?php else : ?>
+                            <li class="user-account"><a href="index.php?page=customer_account" title="Votre compte"><?= htmlspecialchars($_SESSION['firstName']) . " " . htmlspecialchars($_SESSION['lastName']) ?></a></li>
+                            <li class="user-infos"><a href="index.php?page=identity" title="Mes informations">Mes Informations</a></li>
+                            <li class="user-address"><a href="index.php?page=userAddress" title="Mes adresses">Mes adresses</a></li>
+                            <li class="user-orders"><a href="index.php?page=myOrders" title="Mes commandes">Mes commandes</a></li>
+                            <li class="user-bookings"><a href="index.php?page=myBookingsFlowerWorkshop" title="Mes ateliers">Mes ateliers</a></li>
+                            <li class="user-messages"><a href="index.php?page=myMessages" title="Mes messages">Mes messages</a></li>
+                            <li class="user-disconnection"><a href="index.php?page=disconnection" title="Déconnexion">Déconnexion</a></li>
+                        <?php endif; ?>
+                    </ul>
+                </div>
+            </nav>
+            <!-- Affichage du panier de commande -->
+            <div class="icon-cart">
+                <a id="cartStatus" href="index.php?page=viewCart" title="Mon panier">
+                    <img src="www/assets/img/svg/icons/<?= empty($_SESSION['basket']) ? 'cart_empty.svg' : 'cart_full.svg' ?>" alt="Panier" title="<?= empty($_SESSION['basket']) ? 'Panier vide' : 'Voir votre panier' ?>">
+                    <div class="cart-qty">
+                        <span id="targetCartQty" class="qty">
+                            <?= empty($_SESSION['basket']) ? '0' : '' ?>
+                        </span>
+                    </div>
+                </a>
+            </div>
+            <!-- Affichage Menu burger -->
+            <nav>
+                <span id="menuClosed" class="icon-burger-menu-closed"></span>
+                <div class="burger-menu">
+                    <span id="closeMenu" class="close-menu">Menu</span>
+                    <ul>
+                        <li><a href="index.php" title="Accueil">Accueil</a></li>
+                        <?php foreach ($this->_category->getCategorys() as $linkCategory) : ?>
+                            <li><a href="index.php?page=category&id=<?= htmlspecialchars($linkCategory['id_category']) ?>" title="<?= htmlspecialchars($linkCategory['category_name']) ?>"><?= htmlspecialchars($linkCategory['category_name']) ?></a></li>
+                        <?php endforeach; ?>
+                        <?php if (isset($_SESSION['idUser'])) : ?>
+                            <li><a href="index.php?page=customer_account" title="Mon compte">Mon compte</a></li>
+                            <li><a href="index.php?action=disconnection" title="Déconnexion">Déconnexion</a></li>
+                        <?php endif; ?>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- Affichage du corps de la page -->
+        <main class="main-containt">
+            <nav class="header-nav-desktop">
+                <a class="nav-desktop" href="index.php" title="Accueil">Accueil</a>
+                <?php foreach ($this->_category->getCategorys() as $linkCategory) : ?>
+                    <a class="nav-desktop" href="index.php?page=category&id=<?= htmlspecialchars($linkCategory['id_category']) ?>" title="<?= htmlspecialchars($linkCategory['category_name']) ?>"><?= htmlspecialchars($linkCategory['category_name']) ?></a>
+                <?php endforeach; ?>
+            </nav>
+            <!-- Affichage Dynamique -->
+            <?php require $template . ".phtml" ?>
+            <!-- Fin affichage dynamique -->
+        </main>
+        <!-- Affichage du footer -->
+        <footer>
+            <div class="row-footer">
+                <!-- Affichage bloc adresse boutique -->
+                <section class="footer-address">
+                    <h3 class="title-footer">Notre adresse</h3>
+                    <div class="tirets"></div>
+                    <address><?= htmlspecialchars($this->_shopInformation['addresse']) . " - " . htmlspecialchars($this->_shopInformation['zip_code']) . " " . htmlspecialchars($this->_shopInformation['city']) ?></address>
+                    <span><?= htmlspecialchars($this->_shopInformation['phone']) ?></span>
+                    <div class="address-under">
+                        <ul>
+                            <?php foreach ($this->_content->getLinksFooterByLocation($idLocation = 2) as $linkFooter) : ?>
+                                <li><a href="index.php?page=static&id=<?= htmlspecialchars($linkFooter['id_page']) ?>" title="<?= htmlspecialchars($linkFooter['title_content']) ?>"><?= htmlspecialchars($linkFooter['title_content']) ?></a></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                </section>
+                <!-- Affichage bloc liens -->
+                <nav class="footer-nav">
+                    <h3 class="title-footer">Liens utiles</h3>
+                    <div class="tirets"></div>
+                    <ul>
+                        <li><a href="index.php?page=contact" title="Nous contacter">Nous contacter</a></li>
+                        <li><a href="index.php?page=services" title="Nos services">Nos services</a></li>
+                        <!-- Affichage liens dans le bloc / Paramétrable dans l'administration -->
+                        <?php foreach ($this->_content->getLinksFooterByLocation($idLocation = 3) as $linkFooter) : ?>
+                            <li><a href="index.php?page=static&id=<?= htmlspecialchars($linkFooter['id_page']) ?>" title="<?= htmlspecialchars($linkFooter['title_content']) ?>"><?= htmlspecialchars($linkFooter['title_content']) ?></a></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </nav>
+                <!-- Affichage bloc compte utilisateur -->
+                <nav class="footer-nav">
+                    <h3 class="title-footer">Mon compte</h3>
+                    <div class="tirets"></div>
+                    <ul>
+                        <!-- Affichage uniquement si l'utilisateur est connecté -->
+                        <?php if (isset($_SESSION['idUser'])) : ?>
+                            <li><a href="index.php?page=customer_account" title="Mon compte">Mon compte</a></li>
+                            <li><a href="index.php?page=identity" title="Mes informations">Mes Informations</a></li>
+                            <li><a href="index.php?page=userAddress" title="Mes adresses">Mes adresses</a></li>
+                            <li><a href="index.php?page=myOrders" title="Mes commandes">Mes commandes</a></li>
+                            <li><a href="index.php?page=myBookingsFlowerWorkshop" title="Mes ateliers">Mes ateliers</a></li>
+                            <li><a href="index.php?page=myMessages" title="Mes messages">Mes messages</a></li>
+                            <li><a href="index.php?page=disconnection" title="Déconnexion">Déconnexion</a></li>
+                        <?php else : ?>
+                            <li><a href="index.php?page=authentification" title="Connectez-vous">Connectez-vous</a></li>
+                        <?php endif; ?>
+                    </ul>
+                    <!-- Affichage liens dans le bloc / Paramétrable dans l'administration -->
+                    <div class="account-under">
+                        <ul>
+                            <?php foreach ($this->_content->getLinksFooterByLocation($idLocation = 4) as $linkFooter) : ?>
+                                <li><a href="index.php?page=static&id=<?= htmlspecialchars($linkFooter['id_page']) ?>" title="<?= htmlspecialchars($linkFooter['title_content']) ?>"><?= htmlspecialchars($linkFooter['title_content']) ?></a></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                </nav>
+                <!-- Affichage réseaux sociaux -->
+                <section class="icon-social">
+                    <h3 class="title-footer">Suivez-nous</h3>
+                    <div class="tirets"></div>
+                    <div class="icons">
+                        <?php foreach ($this->_socialNetwork->getActiveSocialNetworks() as $socialNetwork) : ?>
+                            <a href="<?= htmlspecialchars($socialNetwork['network_url']) ?>" title="<?= htmlspecialchars($socialNetwork['network_url']) ?>">
+                                <img class="social-icons" src="www/assets/img/svg/icons/<?= htmlspecialchars($socialNetwork['network_img']) ?>" alt="<?= htmlspecialchars($socialNetwork['network_description']) ?>" title="<?= htmlspecialchars($socialNetwork['network_name']) ?>">
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
+                    <!-- Affichage liens dans le bloc / Paramétrable dans l'administration -->
+                    <div class="icon-social-under">
+                        <ul>
+                            <?php foreach ($this->_content->getLinksFooterByLocation($idLocation = 5) as $linkFooter) : ?>
+                                <li><a href="index.php?page=static&id=<?= htmlspecialchars($linkFooter['id_page']) ?>" title="<?= htmlspecialchars($linkFooter['title_content']) ?>"><?= htmlspecialchars($linkFooter['title_content']) ?></a></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                </section>
+                <!-- Affichage bloc société -->
+                <nav class="footer-nav">
+                    <h3 class="title-footer">Société</h3>
+                    <div class="tirets"></div>
+                    <ul>
+                        <!-- Affichage liens dans le bloc / Paramétrable dans l'administration -->
+                        <?php foreach ($this->_content->getLinksFooterByLocation($idLocation = 6) as $linkFooter) : ?>
+                            <li><a href="index.php?page=static&id=<?= htmlspecialchars($linkFooter['id_page']) ?>" title="<?= htmlspecialchars($linkFooter['title_content']) ?>"><?= htmlspecialchars($linkFooter['title_content']) ?></a></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </nav>
+            </div>
+            <div class="copyright">
+                <span>&copy;<a href="https://www.linkedin.com/in/laurent-guigues-25939b69/" title="Copyright Laurent GUIGUES"> Laurent GUIGUES 2021-<?= date('Y') ?></a></span>
+            </div>
+        </footer>
+        <!-- Bouton pour scroll vers le haut de page -->
+        <div>
+            <span id="btnScrollTop" class="arrow-up hidden-btn-scroll"></span>
+        </div>
+    </div>
+    <!-- Librairie Ajax -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Gestion menu -->
+    <script src="www/assets/js/menu.js"></script>
+    <!-- Gestion slider -->
+    <script src="www/assets/js/slider.js"></script>
+    <!-- Gestion animation -->
+    <script src="www/assets/js/animation.js"></script>
+    <!-- Gestion modal -->
+    <script src="www/assets/js/modal.js"></script>
+    <!-- Gestion script principal -->
+    <script src="www/assets/js/app.js"></script>
+    <!-- Gestion panier -->
+    <script src="www/assets/js/cart.js"></script>
+
+    <!-- Important : Si le navigateur ne prends pas en charge le javascript ou si il est désactivé -->
+    <noscript>Votre navigateur ne prends pas en charge le Javascript, ou le javascript est désactivé sur votre navigateur.</noscript>
+</body>
+
+</html>

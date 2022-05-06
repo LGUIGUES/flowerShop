@@ -1,0 +1,54 @@
+<?php if (!isset($_SESSION["idAdmin"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<article>
+    <h2>Création d'un nouveau service</h2>
+    <p>Créez votre nouveau service en suivant les étapes ci-dessous.</p>
+    <nav class="breadcrumb">
+        <a class="first" href="index.php?page=dashBoard">Retour Tableau de bord</a><span class="chevron">&gt;</span><a href="index.php?page=configuration">Retour page configuration</a><span class="chevron">&gt;</span><span class="current-page">Création d'un service</span>
+    </nav>
+    <?php if (array_key_exists('errors', $_SESSION)) : ?>
+        <div class="errors">
+            <?= '<ul>' . implode('<li>', $_SESSION['errors']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <?php if (array_key_exists('success', $_SESSION)) : ?>
+        <div class="success">
+            <?= '<ul>' . implode('<li>', $_SESSION['success']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <form action="index.php?page=createShopService" method="POST">
+        <fieldset>
+            <div class="btn-btn">
+                <label class="required" for="titleService">Titre du service</label>
+                <input type="text" name="titleService" id="titleService" value="<?= isset($_SESSION['formData']['titleService']) ? htmlspecialchars($_SESSION['formData']['titleService']) : "" ?>" size="30" required>
+            </div>
+            <div class="btn-btn">
+                <label class="required" for="activeService">Activer le service</label>
+                <select name="activeService" id="activeService">
+                    <option value="1">Oui</option>
+                    <option value="0">Non</option>
+                </select>
+            </div>
+            <div class="btn-btn">
+                <label for="descriptionService">Description du service</label>
+                <textarea name="descriptionService" id="descriptionService" cols="60" rows="5">
+                    <?= isset($_SESSION['formData']['descriptionService']) ? htmlspecialchars($_SESSION['formData']['descriptionService']) : "" ?>
+                </textarea>
+                <script>
+                    CKEDITOR.replace('descriptionService');
+                </script>
+            </div>
+        </fieldset>
+        <div class="btn-form">
+            <button class="btn-form-submit" id="btn-form-submit" type="submit" name="submit">Enregistrer</button>
+            <a class="btn-form-cancel" href="index.php?page=configuration">Annuler</a>
+        </div>
+    </form>
+</article>
+<?php
+unset($_SESSION['formData']);
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>

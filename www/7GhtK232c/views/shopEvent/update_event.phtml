@@ -1,0 +1,79 @@
+<?php if (!isset($_SESSION["idAdmin"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<article>
+    <h2>Mise à jour d'un évènement</h2>
+    <p>Faite vos modifications et cliquez sur enregistrer.</p>
+    <nav class="breadcrumb">
+        <a class="first" href="index.php?page=dashBoard">Retour Tableau de bord</a><span class="chevron">&gt;</span><a href="index.php?page=configurationEvent">Gestion évènements</a><span class="chevron">&gt;</span><span class="current-page">Modification d'un évènement</span>
+    </nav>
+    <?php if (array_key_exists('errors', $_SESSION)) : ?>
+        <div class="errors">
+            <?= '<ul>' . implode('<li>', $_SESSION['errors']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <?php if (array_key_exists('success', $_SESSION)) : ?>
+        <div class="success">
+            <?= '<ul>' . implode('<li>', $_SESSION['success']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <form action="index.php?page=updateShopEvent" enctype="multipart/form-data" method="POST">
+        <fieldset>
+            <div class="grp-btn">
+                <input type="hidden" name="idEvent" value="<?= htmlspecialchars($event['id_event']) ?>" />
+                <div class="event-status <?= !empty($event['active']) == 1 ? "online" : "offline" ?>">
+                    <p>Evènement actuellement <?= !empty($event['active']) == 1 ? "Activé" : "Désactivé" ?></p>
+                </div>
+                <label class="required" for="activeEvent">Activer</label>
+                <select name="activeEvent" id="activeEvent">
+                    <option value="1">Oui</option>
+                    <option value="0">Non</option>
+                </select>
+            </div>
+            <label class="required" for="titleEvent">Choisissez le titre de votre évènement</label>
+            <input type="text" name="titleEvent" id="titleEvent" value="<?= htmlspecialchars($event['title_shop_event']) ?>" required>
+            <label class="required" for="textEvent">Le contenu de votre évènement</label>
+            <textarea name="textEvent" id="textEvent" cols="80" rows="60" required>
+            <?= htmlspecialchars($event['description_shop_event']) ?>
+            </textarea>
+            <script>
+                CKEDITOR.replace('textEvent');
+            </script>
+            <div class="grp-btn">
+                <label class="required" for="eventDateStart">Date de démarrage</label>
+                <input type="date" name="eventDateStart" id="eventDateStart" value="<?= htmlspecialchars($event['event_start']) ?>" min="<?= date('Y-m-d'); ?>" required />
+            </div>
+            <div class="grp-btn">
+                <label class="required" for="eventDateEnd">Date de fin</label>
+                <input type="date" name="eventDateEnd" id="eventDateEnd" value="<?= htmlspecialchars($event['event_end']) ?>" min="<?= date('Y-m-d'); ?>" required />
+            </div>
+            <div class="grp-btn">
+                <label class="required" for="replaceImage">Souhaitez-vous remplacer l'image ?</label>
+                <select name="replaceImage" id="replaceImage">
+                    <option value="0">non</option>
+                    <option value="1">oui</option>
+                </select>
+            </div>
+            <div class="replace-image">
+                <div class="view-actualy-image">
+                    <p>Image actuel de l'évènement</p>
+                    <img class="img-replace" src="../../www/assets/img/event/miniature/<?= htmlspecialchars($event['img_event_miniature']) ?>" alt="<?= htmlspecialchars($event['title_shop_event']) ?>" />
+                </div>
+                <div class="grp-btn grp-btn-file">
+                    <label for="newImage">Choisissez votre nouvelle image</label>
+                    <input type="file" name="newImage" id="newImage" />
+                    <p class="legend-form-image">Format accepté (jpeg et jpg uniquement) - Poids max : 8Mo</p>
+                </div>
+            </div>
+        </fieldset>
+        <div class="btn-form">
+            <button class="btn-form-submit" id="btn-form-submit" type="submit" name="submit">Enregistrer</button>
+            <a class="btn-form-cancel" href="index.php?page=configurationEvent">Annuler</a>
+        </div>
+    </form>
+</article>
+<?php
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>

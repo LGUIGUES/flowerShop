@@ -1,0 +1,78 @@
+<?php if(!isset($_SESSION["idUser"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<!-- Affichage page mise à jour d'une adresse utilisateur -->
+<article>
+    <div class="row account-user">
+        <h2>Mettre à jour une adresse</h2>
+        <p>Vous allez mettre à jour une adresse de votre compte</p>
+        <nav class="breadcrumb">
+        <a class="first" href="index.php" title="Accueil">Accueil</a><span class="chevron">&gt;</span><a href="index.php?page=customer_account" title="Retour à votre espace personnel">Retour à votre espace personnel</a><span class="chevron">&gt;</span><a href="index.php?page=userAddress" title="Retour à vos adresses">Retour à vos adresses</a><span class="chevron">&gt;</span><span class="current-page">Modifier une adresse</span>
+        </nav>
+        <?php if(array_key_exists('id',$_GET) && is_numeric($_GET['id'])) : ?>
+        <?php if(array_key_exists('errors', $_SESSION)) : ?>
+            <div class="errors">
+                <?= '<ul>'.implode('<li>',$_SESSION['errors']).'</ul>'; ?>
+            </div>
+        <?php endif; ?>
+        <?php if(array_key_exists('success', $_SESSION)) : ?>
+            <div class="success">
+                <?= '<ul>'.implode('<li>',$_SESSION['success']).'</ul>'; ?>
+            </div>
+        <?php endif; ?>
+        <form action="index.php?page=updateUserAddress&id=<?= htmlspecialchars($address['id_address']) ?>" method="POST">
+            <fieldset>                
+                <div class="grp-btn">
+                    <label for="alias">Alias</label>                    
+                    <input type="text" name="alias" id="alias" value="<?= htmlspecialchars($address['alias']) ?>"/>
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="lastName">Nom</label>                   
+                    <input type="text" name="lastName" id="lastName" value="<?= htmlspecialchars($address['lastname']) ?>" required/>                                   
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="firstName">Prénom</label>                   
+                    <input type="text" name="firstName" id="firstName" value="<?= htmlspecialchars($address['firstname']) ?>" required/>                                   
+                </div>
+                <div class="grp-btn">
+                    <label for="company">Société</label>                   
+                    <input type="text" name="company" id="company" value="<?= htmlspecialchars($address['company']) ?>" />                                   
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="address">Adresse</label>                  
+                    <input type="text" name="address" id="address" value="<?= htmlspecialchars($address['addresse']) ?>" required/>                    
+                </div>
+                <div class="grp-btn">
+                    <label for="addressComp">Complément d'adresse</label>                  
+                    <input type="text" name="addressComp" id="addressComp" value="<?= htmlspecialchars($address['address_comp']) ?>"/>                    
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="zipCode">Code Postal</label>                   
+                    <input type="text" name="zipCode" id="zipCode" value="<?= htmlspecialchars($address['zip_code']) ?>" pattern="[0-9]{5}" required/>                      
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="city">Ville</label>                   
+                    <input type="text" name="city" id="city" value="<?= htmlspecialchars($address['city']) ?>" required/>                    
+                </div>
+                <div class="grp-btn">
+                    <label class="required" for="country">Pays</label>                   
+                    <input type="text" name="country" id="country" value="<?= htmlspecialchars($address['country']) ?>" required/>                    
+                </div>                                
+                <div class="grp-btn">
+                    <label class="required" for="phone">Téléphone</label>                   
+                    <input type="tel" name="phone" id="phone" value="<?= htmlspecialchars($address['phone']) ?>" pattern="0[1-68]([. ]?[0-9]{2}){4}" required/>                   
+                </div>
+            </fieldset>         
+            <div class="btn-form">
+                <button class="btn-form-submit" id="btn-form-submit" type="submit" name="submit">Enregistrer</button>
+                <a class="btn-form-cancel" href="index.php?page=userAddress" title="Annuler">Annuler</a>                    
+            </div>                
+        </form>       
+    </div>        
+</article>
+<?php endif; ?>
+<?php
+unset($_SESSION['errors']);
+unset($_SESSION['success']); 
+?>

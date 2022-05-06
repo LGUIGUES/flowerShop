@@ -1,0 +1,39 @@
+<form class="login-panel" action="index.php?page=logAdmin" method="POST">
+    <h2>Connexion administrateur</h2>
+    <?php if(array_key_exists('errors', $_SESSION)) : ?>
+      <div class="errors">
+          <?= '<ul>'.implode('<li>',$_SESSION['errors']).'</ul>'; ?>
+      </div>
+      <?php endif; ?>
+      <?php if(isset($_SESSION['success'])) : ?>
+      <div class="success"><?= htmlspecialchars($_SESSION['success']) ?></div>
+      <?php endif; ?>  
+  <div class="col-md-4">
+    <label for="email" class="form-label">Email</label>
+    <div class="input-group has-validation">      
+      <?php if(isset($_SESSION['formData']['email'])) : ?>
+      <input type="email" class="required" name="email" id="email" value="<?= htmlspecialchars($_SESSION['formData']['email']) ?>" required>
+      <?php else : ?>
+        <input type="email" class="required" name="email" id="email" placeholder="votre@email.fr" required>
+        <?php endif; ?>      
+    </div>
+  </div>
+  <div class="col-md-4">
+    <label for="password" class="form-label">Mot de passe</label>
+    <input class="password" type="password" class="required" name="password" id="password" placeholder="Votre mot de passe" pattern=".{8,20}" required>
+    <span class="view-pass" id="viewPassword"></span>    
+  </div>
+  <div class="col-md-4">
+    <div class="forgot-password">
+      <a href="index.php?page=forgot_password">Mot de passe oublié ? Cliquez ici</a>
+    </div>
+  </div>   
+  <div class="col-12 login">
+    <button class="btn-form-submit" type="submit" name="submit">Se connecter</button>
+  </div>
+</form>
+<?php
+unset($_SESSION['formData']);
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>

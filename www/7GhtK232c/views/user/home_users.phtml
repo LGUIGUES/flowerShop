@@ -1,0 +1,63 @@
+<?php if (!isset($_SESSION["idAdmin"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<article>
+    <h2>Gestion des clients de votre boutique</h2>
+    <p>Cette espace vous permet de visualiser vos clients et d'accéder à des informations supplémentaires.</p>
+    <nav class="breadcrumb">
+        <a class="first" href="index.php?page=dashBoard">Retour Tableau de bord</a>
+    </nav>
+    <?php if (array_key_exists('errors', $_SESSION)) : ?>
+        <div class="errors">
+            <?= '<ul>' . implode('<li>', $_SESSION['errors']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <?php if (array_key_exists('success', $_SESSION)) : ?>
+        <div class="success">
+            <?= '<ul>' . implode('<li>', $_SESSION['success']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <div class="statistics">
+        <span class="icon-user">Clients : <?= number_format(htmlspecialchars($genderDistribution['genre'] / htmlspecialchars($numberCustomers['total']) * 100),0) ?>% d'hommes
+        <span class="icon-age">Age moyen : <?= number_format(htmlspecialchars($averageUserAge['averageAge']),0) ?> ans 
+        <span class="icon-basket">Commandes par client : <?= number_format(htmlspecialchars($averageOrdersByUser['total'] / htmlspecialchars($numberCustomers['total'])),2) ?></span>        
+    </div>
+    <div>
+        <span>Nombre de clients : <?= htmlspecialchars($numberCustomers['total']) ?></span>
+    </div>
+    <div class="row">
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Titre</th>
+                        <th>Prénom</th>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Date d'inscription</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($users as $user) : ?>
+                        <tr>
+                            <td><?= htmlspecialchars($user['id']) ?></td>
+                            <td><?= htmlspecialchars($user['gender_name']) ?></td>
+                            <td><?= htmlspecialchars($user['firstname']) ?></td>
+                            <td><?= htmlspecialchars($user['lastname']) ?></td>
+                            <td><?= htmlspecialchars($user['email']) ?></td>
+                            <td><?= htmlspecialchars(date('d-m-Y', strtotime($user['date_add']))) ?></td>
+                            <td><a href="index.php?page=viewDetailsUser&id=<?= htmlspecialchars($user['id']) ?>"><i class="far fa-eye"></i></a></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</article>
+<?php
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>

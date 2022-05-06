@@ -1,0 +1,12 @@
+<!-- Affichage page galerie photos -->
+<article>
+    <div class="row">
+        <h2 class="title-gallery"><?= htmlspecialchars($infoCategory['title_category']) ?></h2>
+        <div class="text-category-gallery"><?= strip_tags($infoCategory['text_category'], $tags) ?></div>
+        <div class="gallery">
+            <?php foreach ($imagesCategory as $image) : ?>               
+                <img class="<?= htmlspecialchars($image['orientation']) ?>" src="www/assets/img/gallery/category/<?= htmlspecialchars($image['orientation']) . '/' . htmlspecialchars($image['name_category']) ?>" alt="<?= htmlspecialchars($image['description_image']) ?>" title="<?= htmlspecialchars($image['description_image']) ?>">                
+            <?php endforeach; ?>
+        </div>
+    </div>
+</article>

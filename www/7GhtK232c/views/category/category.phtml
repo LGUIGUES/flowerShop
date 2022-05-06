@@ -1,0 +1,93 @@
+<?php if (!isset($_SESSION["idAdmin"])) :
+    header('location:../../../../index.php');
+    exit();
+endif; ?>
+<article>
+    <h2>Gestion de vos catégories</h2>
+    <p>Voici vos catégories actuelles :</p>
+    <nav class="breadcrumb">
+        <a class="first" href="index.php?page=dashBoard">Retour Tableau de bord</a>
+    </nav>
+    <?php if (array_key_exists('errors', $_SESSION)) : ?>
+        <div class="errors">
+            <?= '<ul>' . implode('<li>', $_SESSION['errors']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <?php if (array_key_exists('success', $_SESSION)) : ?>
+        <div class="success">
+            <?= '<ul>' . implode('<li>', $_SESSION['success']) . '</ul>'; ?>
+        </div>
+    <?php endif; ?>
+    <div class="row">
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Id catégorie</th>
+                        <th>Nom de la catégorie</th>
+                        <th>Titre de la catégorie</th>
+                        <th>Introduction de la catégorie</th>
+                        <th>Catégorie Produit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($categorys as $category) : ?>
+                        <tr>
+                            <td><?= htmlspecialchars($category['id_category']) ?></td>
+                            <td><?= htmlspecialchars($category['category_name']) ?></td>
+                            <td><?= htmlspecialchars($category['title_category']) ?></td>
+                            <td><?= strip_tags($category['text_category'],'') ?></td>
+                            <td><?= htmlspecialchars($category['category_product'] == 1) ? 'oui' : 'non' ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <p>Vous pouvez gérer le titre et l'introduction de vos catégories.</p>
+    <form action="index.php?page=category" method="POST">
+        <fieldset>
+            <div class="grp-btn">
+                <label class="required" for="category">Choisissez la catégorie : </label>
+                <select name="category" id="category" required>
+                    <option value="">Choisir une catégorie</option>
+                    <?php if (isset($_POST['idCategory']) || (isset($_POST['categoryName']))) :  ?>
+                        <option value="<?= htmlspecialchars($_POST['idCategory']) ?>"><?= htmlspecialchars($_POST['categoryName']) ?></option>
+                    <?php else : ?>
+                        <?php foreach ($categorys as $category) : ?>
+                            <option value="<?= htmlspecialchars($category['id_category']) ?>"><?= htmlspecialchars($category['category_name']) ?></option>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </select>
+            </div>
+            <div class="grp-btn">
+                <label class="required" for="titleCategory">Titre de la catégorie : </label>
+                <?php if (isset($_POST['titleCategory'])) :   ?>
+                    <input type="text" name="titleCategory" id="titleCategory" value="<?= htmlspecialchars($_POST['titleCategory']) ?>" required />
+                <?php else : ?>
+                    <input type="text" name="titleCategory" id="titleCategory" value="<?= isset($_SESSION['formData']['titleCategory']) ? $_SESSION['formData']['titleCategory'] : '' ?>" required />
+                <?php endif; ?>
+            </div>
+            <div class="grp-btn">
+                <label for="textCategory">Introduction de la catégorie : </label>
+                <?php if (isset($_POST['textCategory'])) :   ?>
+                    <textarea name="textCategory" id="textCategory" cols="100" rows="4"><?= htmlspecialchars($_POST['textCategory']) ?></textarea>
+                <?php else : ?>
+                    <textarea name="textCategory" id="textCategory" cols="100" rows="4"><?= isset($_SESSION['formData']['textCategory']) ? $_SESSION['formData']['textCategory'] : '' ?></textarea>
+                    <script>
+                        CKEDITOR.replace('textCategory');
+                    </script>
+                <?php endif; ?>
+            </div>
+        </fieldset>
+        <div class="btn-form">
+            <button class="btn-form-submit" id="btn-form-submit" type="submit" name="submit">Enregistrer</button>
+            <a class="btn-form-cancel" href="index.php?page=dashBoard">Annuler</a>
+        </div>
+    </form>
+</article>
+<?php
+unset($_SESSION['formData']);
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>

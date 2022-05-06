@@ -1,0 +1,56 @@
+<?php if (isset($_SESSION['idUser']))
+    header('location:index.php?page=customer_account')
+?>
+<!-- Affichage page de connexion utilisateur -->
+<article>
+    <div class="row authentification">
+        <div class="user-connection">
+            <h2>Connexion à votre compte</h2>
+            <p>Vous allez vous connecter à votre espace personnalisé.</p>
+            <?php if (array_key_exists('errors', $_SESSION)) : ?>
+                <div class="errors">
+                    <?= '<ul>' . implode('<li>', $_SESSION['errors']) . '</ul>'; ?>
+                </div>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['success'])) : ?>
+                <div class="success"><?= htmlspecialchars($_SESSION['success']) ?></div>
+            <?php endif; ?>
+            <form action="index.php?page=authentification" method="POST">
+                <div class="flex-form">
+                    <fieldset>
+                        <div class="grp-btn">
+                            <label class="required" for="email">E-mail :</label>
+                            <?php if (isset($_SESSION['formData']['email'])) : ?>
+                                <input type="email" name="email" id="email" value="<?= htmlspecialchars($_SESSION['formData']['email']) ?>" required />
+                            <?php else : ?>
+                                <input type="email" name="email" id="email" placeholder="votre@email.fr" required />
+                            <?php endif; ?>
+                        </div>
+                        <div class="grp-btn">
+                            <label class="required" for="password">Mot de passe :</label>
+                            <input class="password" type="password" name="password" id="password" placeholder="Mot de passe" pattern=".{8,20}" required />
+                            <span class="view-pass" id="viewPassword"></span>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div>
+                            <a class="forgot-password text-align-center" href="index.php?page=forgot_password" title="Mot de passe oublié ? Cliquez ici">Mot de passe oublié ? Cliquez ici</a>
+                        </div>
+                    </fieldset>
+                    <div class="btn-form">
+                        <button class="btn-form-submit" id="btn-form-submit" type="submit" name="submit">Connexion</button>
+                        <button class="btn-form-cancel" type="reset">Effacer</button>
+                    </div>
+                </div>
+            </form>
+            <div>
+                <a class="create-account text-align-center" href="index.php?page=create_account" title="Pas de compte ? Créez le votre ici">Pas de compte ? Créez le votre ici</a>
+            </div>
+        </div>
+    </div>
+</article>
+<?php
+unset($_SESSION['formData']);
+unset($_SESSION['errors']);
+unset($_SESSION['success']);
+?>
